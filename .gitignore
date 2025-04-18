@@ -31,3 +31,5 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/maps/graph-cache/
+/src/main/resources/maps/*.osm.pbf
