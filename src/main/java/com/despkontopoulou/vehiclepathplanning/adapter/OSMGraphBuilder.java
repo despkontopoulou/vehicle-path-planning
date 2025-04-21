@@ -1,14 +1,8 @@
-package com.despkontopoulou.vehiclepathplanning.util;
+package com.despkontopoulou.vehiclepathplanning.adapter;
 
-import com.despkontopoulou.vehiclepathplanning.model.Coordinate;
-import com.despkontopoulou.vehiclepathplanning.model.Graph;
+
 import com.graphhopper.GraphHopper;
-import com.graphhopper.routing.ev.BooleanEncodedValue;
-import com.graphhopper.routing.ev.EncodedValueLookup;
-import com.graphhopper.storage.BaseGraph;
-import com.graphhopper.storage.NodeAccess;
-import com.graphhopper.util.EdgeExplorer;
-import com.graphhopper.util.EdgeIterator;
+
 import com.graphhopper.config.Profile;
 import java.util.List;
 
