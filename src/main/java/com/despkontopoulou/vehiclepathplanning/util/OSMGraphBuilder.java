@@ -9,70 +9,24 @@ import com.graphhopper.storage.BaseGraph;
 import com.graphhopper.storage.NodeAccess;
 import com.graphhopper.util.EdgeExplorer;
 import com.graphhopper.util.EdgeIterator;
-import com.graphhopper.util.GHUtility;
-
-
-import com.graphhopper.GraphHopperConfig;
 import com.graphhopper.config.Profile;
-
 import java.util.List;
 
 public class OSMGraphBuilder {
 
-    private final String osmFilePath="src/main/resources/maps/greece-latest.osm.pbf";
-    private final String graphFolder="src/main/resources/maps/graph-cache";
+    private final String osmFilePath="src/main/resources/maps/greece-latest.osm.pbf"; //where raw map file is
+    private final String graphFolder="src/main/resources/maps/graph-cache";//where the compiled graph will be stored
 
     public GraphHopper loadGraphHopper() {
-        GraphHopper hopper = new GraphHopper();
-
-        GraphHopperConfig config = new GraphHopperConfig()
-                .putObject("graph.flag_encoders", "car")
-                .putObject("graph.location", graphFolder);
-
-        hopper.setGraphHopperLocation(graphFolder);
-        hopper.setOSMFile(osmFilePath);
+        GraphHopper hopper = new GraphHopper(); //creation of graphhopper instance
+        hopper.setGraphHopperLocation(graphFolder); // where to read/write processed graph files
+        hopper.setOSMFile(osmFilePath); // where raw map of file is
         hopper.setProfiles(
-                List.of(new Profile("car").setVehicle("car").setWeighting("fastest"))
+                List.of(new Profile("car").setVehicle("car").setWeighting("fastest"))//set car as type of vehicle and fastest as weighting (for now)
         );
-
-        hopper.setStoreOnFlush(true);
-        hopper.importOrLoad();
-
-        return hopper;
+        hopper.setStoreOnFlush(true);//after first run store graph in graphfolder
+        hopper.importOrLoad();//if no graph is cached import osm file, else just load cached
+        return hopper; //return graphhopper instance
     }
 
-    public Graph convertToCustomGraph(GraphHopper hopper){
-        Graph customGraph = new Graph();
-
-        BaseGraph baseGraph = (BaseGraph) hopper.getBaseGraph(); // Cast to BaseGraph to access internals
-        NodeAccess nodeAccess = baseGraph.getNodeAccess();
-        EdgeExplorer edgeExplorer = baseGraph.createEdgeExplorer();
-
-        EncodedValueLookup evLookup = hopper.getEncodingManager(); // this replaces FlagEncoder
-        BooleanEncodedValue accessEnc = evLookup.getBooleanEncodedValue("car_access"); // THIS is the key change
-
-        int nodeCount = baseGraph.getNodes();
-
-        for (int nodeId = 0; nodeId < nodeCount; nodeId++) {
-            double lat = nodeAccess.getLat(nodeId);
-            double lon = nodeAccess.getLon(nodeId);
-            customGraph.addNode((long) nodeId, new Coordinate(lon, lat));
-
-            EdgeIterator edgeIterator = edgeExplorer.setBaseNode(nodeId);
-            while (edgeIterator.next()) {
-                int neighborId = edgeIterator.getAdjNode();
-                double distance = edgeIterator.getDistance(); // in meters
-
-                // Use accessEnc to check if this direction is allowed
-                boolean fwd = edgeIterator.get(accessEnc); // forward direction
-                boolean bwd = edgeIterator.getReverse(accessEnc); // backward direction
-
-                if (fwd)
-                    customGraph.addEdge((long) nodeId, (long) neighborId, distance);
-                if (bwd)
-                    customGraph.addEdge((long) neighborId, (long) nodeId, distance);
-            }
-        }
-        return customGraph;
-    }
 }
