@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface RoutingGraph {
-    Coordinate getCoordinatesOfNode(int nodeId);
-    List<Node> getNeighboursofNode(int nodeId);
-    List<Node> reconstructPath(List<Node> predecessors,Node start, Node goal);
+    Coordinate getCoordinatesOfNode(Long nodeId);
+    Map<Long,Double> getNeighboursofNode(Long nodeId);
+    Node getNode(Long nodeId);
 }
