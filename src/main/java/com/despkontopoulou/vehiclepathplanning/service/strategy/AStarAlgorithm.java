@@ -28,16 +28,16 @@ public class AStarAlgorithm implements AlgorithmStrategy{ //implement strategy i
                 return reconstructPath(cameFrom, goal);
             }
 
-            for (Map.Entry<Long, Double> neighborEntry : graph.getNeighboursofNode(current.id()).entrySet()) { //if not, loop through neighbours
-                Long neighborId = neighborEntry.getKey();//get id and edge weight!!!!!!!!!!!! CHECK
-                Double weight = neighborEntry.getValue();
+            for (Map.Entry<Long, Double> neighbourEntry : graph.getNeighboursofNode(current.id()).entrySet()) { //if not, loop through neighbours
+                Long neighbourId = neighbourEntry.getKey();//get id and edge weight from neighbour node
+                Double weight = neighbourEntry.getValue();
 
                 double tentativeGScore = gScore.get(current.id()) + weight; // tentative cost through current
-                if (tentativeGScore < gScore.getOrDefault(neighborId, Double.POSITIVE_INFINITY)) {//if tentative is shorter
-                    cameFrom.put(neighborId, current.id());//update path
-                    gScore.put(neighborId, tentativeGScore);//update cost
-                    Node neighborNode = graph.getNode(neighborId);//add neighbour to explore
-                    openSet.add(neighborNode);
+                if (tentativeGScore < gScore.getOrDefault(neighbourId, Double.POSITIVE_INFINITY)) {//if tentative is shorter
+                    cameFrom.put(neighbourId, current.id());//update path
+                    gScore.put(neighbourId, tentativeGScore);//update cost
+                    Node neighbourNode = graph.getNode(neighbourId);//add neighbour to explore
+                    openSet.add(neighbourNode);
                 }
             }
         }

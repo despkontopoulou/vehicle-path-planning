@@ -2,9 +2,11 @@ package com.despkontopoulou.vehiclepathplanning.adapter;
 
 import com.despkontopoulou.vehiclepathplanning.model.Coordinate;
 import com.despkontopoulou.vehiclepathplanning.model.Node;
+import com.despkontopoulou.vehiclepathplanning.model.RoutePreference;
 import com.despkontopoulou.vehiclepathplanning.service.graph.RoutingGraph;
 import com.graphhopper.GraphHopper;
 import com.graphhopper.routing.ev.BooleanEncodedValue;
+import com.graphhopper.routing.ev.DecimalEncodedValue;
 import com.graphhopper.routing.ev.EncodedValueLookup;
 import com.graphhopper.storage.BaseGraph;
 import com.graphhopper.storage.NodeAccess;
@@ -19,14 +21,18 @@ public class GHRoutingGraphAdapter implements RoutingGraph {
     private final NodeAccess nodeAccess;
     private final EdgeExplorer edgeExplorer;
     private final BooleanEncodedValue accessEnc;
+    private final DecimalEncodedValue speedEnc;
+    private final RoutePreference pref;
 
-    public GHRoutingGraphAdapter(GraphHopper hopper){
+    public GHRoutingGraphAdapter(GraphHopper hopper, RoutePreference preference){
         this.baseGraph= hopper.getBaseGraph();
         this.nodeAccess = baseGraph.getNodeAccess();
         this.edgeExplorer=baseGraph.createEdgeExplorer();
+        this.pref=preference;
 
         EncodedValueLookup evLookup= hopper.getEncodingManager();
         this.accessEnc = evLookup.getBooleanEncodedValue("car_access");
+        this.speedEnc= evLookup.getDecimalEncodedValue("car_average_speed");
     }
 
     @Override
@@ -46,10 +52,32 @@ public class GHRoutingGraphAdapter implements RoutingGraph {
             boolean accessible=iter.get(accessEnc);
             if(accessible){//check if an edge is accessible, maybe its a one-way
                 double distance=iter.getDistance();
-                neighbours.put((long)neighbourId, distance);//if its is accessible, add to neighbours
+                double speed = iter.get(speedEnc);
+                double weight= switch(pref){
+                    case SHORTEST -> distance;
+                    case FASTEST -> distance/(speed*1000.0/3600.0);//m/s
+                    case ECO -> estimatedFuelCost(distane,speed);
+                };
+                neighbours.put((long) neighbourId, weight);
+                /*ELSE WE CAN USE
+                *double time = iter.get(avgSpeed);
+                *double distance = iter.getDistance();
+                * double time/distance etc
+                * ...
+                * to compute based on travel time
+                *or USE ENUM
+                *
+                *
+                *
+                * */
             }
         }
         return neighbours;//return neighbour node ids and edge weights
+    }
+    private double estimatedFuelCost(double distance, double speedkmh){/// can be improved
+        double speed=speedkmh*1000.0/3600.0;//m/s
+        double efficiency=(speed<15) ? 1.2 : (speed>30) ? 1.5 : 1.0;
+        return distance*efficiency;
     }
 
     @Override
