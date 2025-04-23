@@ -59,17 +59,6 @@ public class GHRoutingGraphAdapter implements RoutingGraph {
                     case ECO -> estimatedFuelCost(distane,speed);
                 };
                 neighbours.put((long) neighbourId, weight);
-                /*ELSE WE CAN USE
-                *double time = iter.get(avgSpeed);
-                *double distance = iter.getDistance();
-                * double time/distance etc
-                * ...
-                * to compute based on travel time
-                *or USE ENUM
-                *
-                *
-                *
-                * */
             }
         }
         return neighbours;//return neighbour node ids and edge weights
