@@ -56,7 +56,7 @@ public class GHRoutingGraphAdapter implements RoutingGraph {
                 double weight= switch(pref){
                     case SHORTEST -> distance;
                     case FASTEST -> distance/(speed*1000.0/3600.0);//m/s
-                    case ECO -> estimatedFuelCost(distane,speed);
+                    case ECO -> estimatedFuelCost(distance,speed);
                 };
                 neighbours.put((long) neighbourId, weight);
             }
