@@ -1,7 +1,9 @@
 package com.despkontopoulou.vehiclepathplanning.service.strategy;
 
+import com.despkontopoulou.vehiclepathplanning.model.EdgeData;
 import com.despkontopoulou.vehiclepathplanning.model.Node;
 import com.despkontopoulou.vehiclepathplanning.model.PathResult;
+import com.despkontopoulou.vehiclepathplanning.model.RoutePreference;
 import com.despkontopoulou.vehiclepathplanning.service.graph.RoutingGraph;
 import org.springframework.stereotype.Component;
 
@@ -18,16 +20,13 @@ public class DijkstraAlgorithm implements AlgorithmStrategy{
     }
 
     @Override
-    public PathResult findPath(Node start, Node goal) {
+    public PathResult findPath(Node start, Node goal, RoutePreference pref) {
         long startTime = nanoTime();
 
-        // gScore holds the best-known distance from start → each node
-        Map<Long, Double> gScore = new HashMap<>();
-        // cameFrom holds the parent pointers for path reconstruction
-        Map<Long, Long> cameFrom = new HashMap<>();
+        Map<Long, Double> gScore = new HashMap<>(); //distances from start to each node
+        Map<Long, Long> cameFrom = new HashMap<>(); //predecessors
 
-        // Min-heap ordered by gScore only
-        PriorityQueue<Node> openSet =
+        PriorityQueue<Node> openSet =//minheap ordered by g score
                 new PriorityQueue<>(Comparator.comparingDouble(n ->
                         gScore.getOrDefault(n.id(), Double.POSITIVE_INFINITY)));
 
@@ -39,7 +38,6 @@ public class DijkstraAlgorithm implements AlgorithmStrategy{
         while (!openSet.isEmpty()) {
             Node current = openSet.poll();
             double currentDist = gScore.getOrDefault(current.id(), Double.POSITIVE_INFINITY);
-
             // Early exit if we reached the goal
             if (current.id().equals(goal.id())) {
                 foundGoal = true;
@@ -47,15 +45,16 @@ public class DijkstraAlgorithm implements AlgorithmStrategy{
             }
 
             // Relax each outgoing edge
-            for (Map.Entry<Long, Double> e : graph.getNeighboursofNode(current.id()).entrySet()) {
-                long nbrId = e.getKey();
-                double weight = e.getValue();
+            for (Map.Entry<Long, EdgeData> edge : graph.getEdges(current.id()).entrySet()) {
+                long neighbourId = edge.getKey();
+                EdgeData edgeData = edge.getValue();
+                double weight=  computeWeight(edgeData,pref);//based on the users pref get weighting
                 double tentative = currentDist + weight;
 
-                if (tentative < gScore.getOrDefault(nbrId, Double.POSITIVE_INFINITY)) {
-                    cameFrom.put(nbrId, current.id());
-                    gScore.put(nbrId, tentative);
-                    openSet.add(graph.getNode(nbrId));
+                if (tentative < gScore.getOrDefault(neighbourId, Double.POSITIVE_INFINITY)) {
+                    cameFrom.put(neighbourId, current.id());
+                    gScore.put(neighbourId, tentative);
+                    openSet.add(graph.getNode(neighbourId));
                 }
             }
         }

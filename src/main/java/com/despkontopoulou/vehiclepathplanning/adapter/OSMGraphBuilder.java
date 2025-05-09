@@ -4,8 +4,11 @@ package com.despkontopoulou.vehiclepathplanning.adapter;
 import com.graphhopper.GraphHopper;
 
 import com.graphhopper.config.Profile;
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
+@Component
 public class OSMGraphBuilder {
 
     private final String osmFilePath="src/main/resources/maps/greece-latest.osm.pbf"; //where raw map file is
