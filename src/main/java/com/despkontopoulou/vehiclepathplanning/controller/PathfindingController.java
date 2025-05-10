@@ -47,4 +47,14 @@ public class PathfindingController {
     }
 
     @GetMapping("/best")
+    public PathResult best(
+            @RequestParam double startLat,
+            @RequestParam double startLon,
+            @RequestParam double goalLat,
+            @RequestParam double goalLon,
+            @RequestParam RoutePreference pref) {
+        Coordinate startCoord = new Coordinate(startLat, startLon);
+        Coordinate goalCoord = new Coordinate(goalLat, goalLon);
+        return service.bestRoute(startCoord, goalCoord, pref);
+    }
 }

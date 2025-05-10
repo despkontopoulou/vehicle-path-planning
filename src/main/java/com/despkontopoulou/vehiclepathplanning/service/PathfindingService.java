@@ -55,4 +55,15 @@ public class PathfindingService {
         );
     }
 
+    public PathResult bestRoute(
+            Coordinate startCoordinate,
+            Coordinate goalCoordinate,
+            RoutePreference pref) {
+        Node startNode = graph.getClosestNode(startCoordinate);
+        Node goalNode = graph.getClosestNode(goalCoordinate);
+
+        //for now just astar
+        return astarAlgorithm.findPath(startNode, goalNode, pref);
+    }
+
 }
