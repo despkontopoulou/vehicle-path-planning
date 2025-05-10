@@ -9,6 +9,8 @@ import com.graphhopper.GraphHopper;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 import static com.despkontopoulou.vehiclepathplanning.model.AlgorithmType.*;
 
 @Service
@@ -18,7 +20,10 @@ public class PathfindingService {
     private final AlgorithmStrategy dijkstraAlgorithm;
 
 
-    public PathfindingService(RoutingGraph graph, @Qualifier("astar") AlgorithmStrategy astarAlgorithm, @Qualifier("dijkstra") AlgorithmStrategy dijkstraAlgorithm) {
+    public PathfindingService(
+            RoutingGraph graph,
+            @Qualifier("astar") AlgorithmStrategy astarAlgorithm,
+            @Qualifier("dijkstra") AlgorithmStrategy dijkstraAlgorithm) {
         this.graph = graph;
         this.astarAlgorithm = astarAlgorithm;
         this.dijkstraAlgorithm = dijkstraAlgorithm;
@@ -33,4 +38,21 @@ public class PathfindingService {
         };
         return strategy.findPath(startNode, goalNode, pref);
     }
+
+    public Map<String, PathResult> compareRoutes(
+            Coordinate startCoordinate,
+            Coordinate goalCoordinate,
+            RoutePreference pref){
+        Node startNode = graph.getClosestNode(startCoordinate);
+        Node goalNode = graph.getClosestNode(goalCoordinate);
+
+        PathResult astarResult = astarAlgorithm.findPath(startNode, goalNode, pref);
+        PathResult dijkstraResult = dijkstraAlgorithm.findPath(startNode, goalNode, pref);
+
+        return Map.of(
+                "astar", astarResult,
+                "dijkstra", dijkstraResult
+        );
+    }
+
 }

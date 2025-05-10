@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
-@RequestMapping("/route")
+@RequestMapping("/api/routes")
 public class PathfindingController {
     private final PathfindingService service;
 
@@ -31,4 +33,18 @@ public class PathfindingController {
         Coordinate goalCoord = new Coordinate(goalLat, goalLon);
         return service.findRoute(startCoord, goalCoord, pref, algorithm);
     }
+
+    @GetMapping("/compare")
+    public Map<String, PathResult> compare(
+            @RequestParam double startLat,
+            @RequestParam double startLon,
+            @RequestParam double goalLat,
+            @RequestParam double goalLon,
+            @RequestParam RoutePreference pref){
+        Coordinate startCoord = new Coordinate(startLat, startLon);
+        Coordinate goalCoord = new Coordinate(goalLat, goalLon);
+        return service.compareRoutes(startCoord, goalCoord, pref);
+    }
+
+    @GetMapping("/best")
 }
