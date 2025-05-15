@@ -1,13 +1,36 @@
-import { Link } from 'react-router-dom';
+import '../LandingPage.css';
+import HeroSection from '../components/HeroSection';
+import IntroSection from '../components/IntroSection';
+import Divider from '../components/Divider';
+import CardGrid from '../components/CardGrid';
+
+import modelImage from '../assets/3d-model.png';
+
 export default function LandingPage() {
     return (
-        <div className="landing-page">
-            <h1>Vehicle Path Planning</h1>
-            <p>Research & comparative study of routing algorithms.</p>
-            <div className="cards">
-                <Link to="/research" className="card">Research Mode </Link>
-                <Link to="/route"    className="card">User Mode</Link>
-            </div>
+        <div className="landing-container">
+            <HeroSection
+                title="Compare and Visualize Car Routing Algorithms"
+                subtitle="A research-backed routing app showcasing pathfinding algorithms"
+            />
+
+            <IntroSection
+                image={modelImage}
+                paragraphs={[
+                    "Built as part of my dissertation at University of Piraeus, this app lets you...",
+                    "• Explore the shortest, fastest and eco-friendly routes",
+                    "• Compare algorithm performance side by side",
+                    "• Visualize routing on real maps"
+                ]}
+            />
+
+            <Divider />
+
+            <CardGrid cards={[
+                "Research Mode",
+                "User Mode",
+                "More Features Soon"
+            ]} />
         </div>
     );
 }
