@@ -29,9 +29,7 @@ public class PathfindingController {
             @RequestParam double goalLon,
             @RequestParam RoutePreference pref,
             @RequestParam AlgorithmType algorithm) {
-        Coordinate startCoord = new Coordinate(startLat, startLon);
-        Coordinate goalCoord = new Coordinate(goalLat, goalLon);
-        return service.findRoute(startCoord, goalCoord, pref, algorithm);
+        return service.findRoute(startLat,startLon,goalLat,goalLon, pref, algorithm);
     }
 
     @GetMapping("/compare")
@@ -41,9 +39,7 @@ public class PathfindingController {
             @RequestParam double goalLat,
             @RequestParam double goalLon,
             @RequestParam RoutePreference pref){
-        Coordinate startCoord = new Coordinate(startLat, startLon);
-        Coordinate goalCoord = new Coordinate(goalLat, goalLon);
-        return service.compareRoutes(startCoord, goalCoord, pref);
+        return service.compareRoutes(startLat,startLon,goalLat,goalLon, pref);
     }
 
     @GetMapping("/best")
@@ -53,8 +49,6 @@ public class PathfindingController {
             @RequestParam double goalLat,
             @RequestParam double goalLon,
             @RequestParam RoutePreference pref) {
-        Coordinate startCoord = new Coordinate(startLat, startLon);
-        Coordinate goalCoord = new Coordinate(goalLat, goalLon);
-        return service.bestRoute(startCoord, goalCoord, pref);
+        return service.bestRoute(startLat,startLon,goalLat,goalLon,pref);
     }
 }

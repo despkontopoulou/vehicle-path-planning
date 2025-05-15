@@ -29,7 +29,9 @@ public class PathfindingService {
         this.dijkstraAlgorithm = dijkstraAlgorithm;
     }
 
-    public PathResult findRoute(Coordinate startCoordinate, Coordinate goalCoordinate, RoutePreference pref, AlgorithmType algorithmType) {
+    public PathResult findRoute(double startLat, double startLon , double goalLat , double goalLon, RoutePreference pref, AlgorithmType algorithmType) {
+        Coordinate startCoordinate = new Coordinate(startLat,startLon);
+        Coordinate goalCoordinate = new Coordinate(goalLat,goalLon);
         Node startNode = graph.getClosestNode(startCoordinate);
         Node goalNode = graph.getClosestNode(goalCoordinate);
         AlgorithmStrategy strategy = switch (algorithmType){
@@ -40,9 +42,10 @@ public class PathfindingService {
     }
 
     public Map<String, PathResult> compareRoutes(
-            Coordinate startCoordinate,
-            Coordinate goalCoordinate,
+            double startLat, double startLon , double goalLat , double goalLon,
             RoutePreference pref){
+        Coordinate startCoordinate = new Coordinate(startLat,startLon);
+        Coordinate goalCoordinate = new Coordinate(goalLat,goalLon);
         Node startNode = graph.getClosestNode(startCoordinate);
         Node goalNode = graph.getClosestNode(goalCoordinate);
 
@@ -56,9 +59,10 @@ public class PathfindingService {
     }
 
     public PathResult bestRoute(
-            Coordinate startCoordinate,
-            Coordinate goalCoordinate,
+            double startLat, double startLon , double goalLat , double goalLon,
             RoutePreference pref) {
+        Coordinate startCoordinate = new Coordinate(startLat,startLon);
+        Coordinate goalCoordinate = new Coordinate(goalLat,goalLon);
         Node startNode = graph.getClosestNode(startCoordinate);
         Node goalNode = graph.getClosestNode(goalCoordinate);
 
