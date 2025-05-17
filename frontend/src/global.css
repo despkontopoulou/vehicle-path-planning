@@ -12,4 +12,6 @@ body {
   padding: 0;
   font-family: var(--font-main);
   background-color: var(--bg-color);
+  background-image: radial-gradient(rgba(120, 134, 93, 0.4) 1px, transparent 0);
+  background-size: 20px 20px;
 }
