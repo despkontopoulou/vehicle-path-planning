@@ -27,9 +27,9 @@ export default function LandingPage() {
             <Divider />
 
             <CardGrid cards={[
-                "Research Mode",
-                "User Mode",
-                "More Features Soon"
+                "Compare Algorithms",
+                "Find Optimal Route",
+                "Read Project Overview"
             ]} />
         </div>
     );
