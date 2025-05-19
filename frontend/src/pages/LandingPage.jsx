@@ -1,11 +1,11 @@
-import '../LandingPage.css';
-import HeroSection from '../components/HeroSection';
-import IntroSection from '../components/IntroSection';
-import Divider from '../components/Divider';
-import CardGrid from '../components/CardGrid';
+import '../styling/LandingPage.css';
+import HeroSection from '../components/general/HeroSection';
+import IntroSection from '../components/general/IntroSection';
+import Divider from '../components/general/Divider';
+import CardGrid from '../components/landing_page/CardGrid';
 
 import modelImage from '../assets/3d-model.png';
-import FadeUpOnScroll from "../components/FadeUpOnScroll";
+import FadeUpOnScroll from "../components/general/FadeUpOnScroll";
 
 export default function LandingPage() {
     return (

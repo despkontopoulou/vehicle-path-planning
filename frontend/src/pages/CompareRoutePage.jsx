@@ -1,4 +1,4 @@
-import PointSelector from "../components/PointSelector";
+import PointSelector from "../components/point_selection/PointSelector";
 import { useNavigate } from 'react-router-dom';
 
 export default function CompareRoutePage() {
