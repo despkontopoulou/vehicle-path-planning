@@ -1,25 +1,37 @@
+:root {
+    --bg-color: #E0E1DB;
+    --primary-text: #465149;
+    --secondary-text: #5C6C47;
+    --card-bg: #F2F0F1;
+    --font-family: 'Inter', sans-serif;
+}
+
 .point-selector-container {
     padding: 60px 0;
 }
-.map-container {
-    width: 100%;
-    max-width: 1200px;
+
+/* --- Layout --- */
+.point-selector-layout {
+    display: flex;
+    gap: 40px;
+    max-width: 1400px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 40px 20px;
 }
 
-.leaflet-container {
-    height: 600px;
-    width: 100%;
-    z-index: 0;
+.left-pane {
+    flex: 1;
+    max-width: 300px;
 }
 
-.section-title {
-    text-align: center;
-    font-size: 28px;
-    color: var(--primary-text);
-    margin-bottom: 30px;
+.right-pane {
+    flex: 3;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
+
+/* --- Map --- */
 .map-wrapper {
     width: 100%;
     max-width: 1000px;
@@ -27,30 +39,45 @@
     padding: 0 20px;
     box-sizing: border-box;
 }
-.point-selector-button-container {
-    text-align: center;
-    margin-top: 20px;
+
+.leaflet-container {
+    height: 600px;
+    width: 100%;
+    z-index: 0; /* make sure it's below UI elements */
+    position: relative;
 }
 
-.search-bar {
+/* --- Search Bar & Top Controls --- */
+.top-controls {
     position: absolute;
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
+    z-index: 1000;
+    max-width: 600px;
+    width: 90%;
+    pointer-events: auto;
+}
+
+.search-bar {
+    pointer-events: auto;
+    z-index: 1001;
     background: white;
     padding: 10px 15px;
     border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 1000;
     display: flex;
     gap: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .search-bar input {
+    flex: 1;
     padding: 8px;
     font-size: 14px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    z-index: 1002;
+    position: relative;
 }
 
 .search-bar button {
@@ -60,4 +87,70 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+/* --- Section title --- */
+.section-title {
+    text-align: center;
+    font-size: 28px;
+    color: var(--primary-text);
+    margin-bottom: 30px;
+}
+
+/* --- Selected location popup --- */
+.selected-location-container {
+    margin: 30px auto;
+    max-width: 600px;
+}
+
+.selected-location-popup {
+    width: 100%;
+    max-width: 600px;
+    background: white;
+    border-radius: 12px;
+    padding: 20px 30px;
+    text-align: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    z-index: 999;
+}
+
+.popup-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.popup-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--secondary-text);
+    color: white;
+    cursor: pointer;
+}
+
+/* --- Summary Card --- */
+.location-summary-card {
+    background: white;
+    padding: 24px;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: var(--primary-text);
+}
+
+.location-summary-card p {
+    cursor: pointer;
+    padding: 6px 0;
+}
+
+.location-summary-card p:hover {
+    text-decoration: underline;
+    color: var(--secondary-text);
+}
+
+/* --- Button --- */
+.point-selector-button-container {
+    text-align: center;
+    margin-top: 20px;
 }
