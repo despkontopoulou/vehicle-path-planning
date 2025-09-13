@@ -1,7 +1,7 @@
 import React from 'react';
 import {createRoot} from 'react-dom/client';
 import App from './App';
-import './global.css';
+import './styling/global.css';
 import '@fontsource/inter'
 
 const container = document.getElementById('root');
