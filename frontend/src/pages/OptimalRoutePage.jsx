@@ -1,4 +1,4 @@
-import PointSelector from '../components/point_selection/PointSelector';
+import PointSelectionPage from "../pages/PointSelectionPage";
 import { useNavigate } from 'react-router-dom';
 
 export default function OptimalRoutePage() {
@@ -16,7 +16,7 @@ export default function OptimalRoutePage() {
 
     return (
         <div>
-            <PointSelector onPointsSelected={handlePointsSelected} mode="optimal" />
+            <PointSelectionPage onPointsSelected={handlePointsSelected} mode="optimal" />
         </div>
     );
 }
