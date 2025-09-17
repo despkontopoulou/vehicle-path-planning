@@ -32,12 +32,6 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
 
     const mapRef = useRef(null);
 
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         mapRef.current?.invalidateSize();
-    //     }, 300);
-    // }, []);
-
     useEffect(() => {
         setupLeafletIcons();
     }, []);

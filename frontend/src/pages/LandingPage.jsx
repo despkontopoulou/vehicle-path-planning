@@ -47,8 +47,8 @@ export default function LandingPage() {
                     "Read Project Overview"
                 ]}
                   routes={[
-                      "/research",      // goes to CompareRoutePage
-                      "/route",         // goes to OptimalRoutePage
+                      "/compare",      // goes to CompareRoutePage
+                      "/optimal",         // goes to OptimalRoutePage
                       "/about"
                   ]}
                 />
