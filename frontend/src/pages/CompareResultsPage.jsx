@@ -15,7 +15,6 @@ export default function CompareResultsPage() {
     const [sp] = useSearchParams();
     const start = useMemo(() => parseLatLng(sp.get('start')), [sp]);
     const end = useMemo(() => parseLatLng(sp.get('end')), [sp]);
-    const pref = sp.get('pref') || 'FASTEST'; // later you can expose this in UI
 
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -29,25 +28,26 @@ export default function CompareResultsPage() {
         }
         setLoading(true);
         compareRoutes({
-            startLat: start.lat, startLon: start.lng,
-            goalLat: end.lat, goalLon: end.lng,
-            pref
+            startLat: start.lat,
+            startLon: start.lng,
+            goalLat: end.lat,
+            goalLon: end.lng
         })
             .then(setData)
             .catch(e => setErr(e.message || 'Request failed'))
             .finally(() => setLoading(false));
-    }, [start, end, pref]);
+    }, [start, end]);
 
     if (loading) return <div>Loading results…</div>;
     if (err) return <div>Error: {err}</div>;
-    if (!data) return <div>No data</div>;
+    if (!data || !data.routes) return <div>No data</div>;
 
-    // Transform backend paths to arrays of [lat, lng]
-    const routes = Object.entries(data).map(([name, result]) => ({
+    // 🔹 Transform backend response into frontend route objects
+    const routes = Object.entries(data.routes).map(([name, result]) => ({
         name,
-        points: (result.path || []).map(n => [n.coords.latitude, n.coords.longitude]),
-        totalCost: result.totalCost,
-        durationNanos: result.durationNanos
+        points: (result.path || []).map(p => [p.lat, p.lon]),
+        totalDistance: result.totalDistance,
+        totalTime: result.totalTime
     }));
 
     return (

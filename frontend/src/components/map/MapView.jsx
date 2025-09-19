@@ -4,6 +4,7 @@ import { startIcon, endIcon } from './customIcons';
 
 export default function MapView({ start, end, routes }) {
     // Fallback center if no points
+    const colors = ["blue", "red", "green", "orange"]
     const center = start || { lat: 37.9838, lng: 23.7275 };
     const bounds = (() => {
         const pts = [];
@@ -18,7 +19,11 @@ export default function MapView({ start, end, routes }) {
             <MapContainer center={[center.lat, center.lng]} zoom={12} style={{ height: 500, width: '100%' }}>
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                 {routes.map((r, i) => (
-                    <Polyline key={i} positions={r.points} color={i === 0 ? 'blue' : 'purple'} />
+                    <Polyline
+                        key={i}
+                        positions={r.points}
+                        color={colors[i % colors.length]}
+                    />
                 ))}
                 {start && <Marker position={[start.lat, start.lng]} icon={startIcon}><Popup>Start</Popup></Marker>}
                 {end && <Marker position={[end.lat, end.lng]} icon={endIcon}><Popup>End</Popup></Marker>}
