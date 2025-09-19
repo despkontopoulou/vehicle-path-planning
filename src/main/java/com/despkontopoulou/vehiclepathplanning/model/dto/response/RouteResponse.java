@@ -7,5 +7,6 @@ import java.util.List;
 public record RouteResponse(
     List<Coordinate> path,
     double totalDistance,
-    double totalTime
+    double totalTime,
+    long computationTimeNs
 ) {}

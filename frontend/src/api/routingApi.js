@@ -14,6 +14,7 @@ export function compareRoutes(params) {
             startLon: params.startLon,
             endLat: params.endLat,
             endLon: params.endLon,
+            profile: params.profile
         }
     }).then(res => res.data);
 }

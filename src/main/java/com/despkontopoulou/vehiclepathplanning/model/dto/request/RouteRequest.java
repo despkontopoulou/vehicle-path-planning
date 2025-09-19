@@ -5,5 +5,6 @@ public record RouteRequest(
         double startLon,
         double endLat,
         double endLon,
-        String profile
+        String profile,
+        String algorithm
 ) {}

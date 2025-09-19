@@ -19,6 +19,7 @@ import LocationSummary from "../components/point_selection/LocationSummary";
 import { setupLeafletIcons } from '../utils/leafletSetup';
 import InteractiveMap from "../components/map/InteractiveMap";
 import {forwardGeocode, reverseGeocode} from "../utils/geocoding";
+import ProfileSelector from "../components/point_selection/ProfileSelector";
 
 export default function PointSelectionPage({ onPointsSelected, mode }) {
     const [start, setStart] = useState(null);
@@ -29,6 +30,7 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
 
     const [pendingPoint, setPendingPoint] = useState(null);
     const [pendingLabel, setPendingLabel] = useState('');
+    const [profile, setProfile] = useState("car_fastest");
 
     const mapRef = useRef(null);
 
@@ -69,12 +71,14 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     };
 
     const handleContinue = () => {
-        if (start && end) onPointsSelected(start, end);
+        if (start && end) onPointsSelected(start, end, profile);
     };
 
     return (
         <div className="point-selector-container">
             <SectionTitle text={mode === 'compare' ? 'Select Points to Compare Algorithms' : 'Select Points for Optimal Route'} />
+
+            <ProfileSelector value={profile} onChange={setProfile} />
 
             <PointSelectorLayout
                 left={
@@ -90,7 +94,6 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                 }
                 right={
                     <>
-                        {/* SearchBar OUTSIDE the map */}
                         <div style={{ margin: '0 20px 10px' }}>
                             <SearchBar onSearch={handleSearch} />
                         </div>

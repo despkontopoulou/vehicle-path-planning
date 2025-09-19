@@ -11,6 +11,7 @@ import com.graphhopper.ResponsePath;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -23,25 +24,31 @@ public class CompareRoutingService {
     }
 
     public CompareRouteResponse compareRoutes(RouteRequest request) {
+        List<String> algorithms = List.of("dijkstra", "dijkstrabi", "astar", "astarbi");
+
         Map<String, RouteResponse> results = new HashMap<>();
 
-        for (String profile : new String[]{"car_fastest", "car_shortest", "car_eco"}) {
+        for (String algorithm : algorithms) {
             GHRequest ghRequest = new GHRequest(
                     request.startLat(),
                     request.startLon(),
                     request.endLat(),
                     request.endLon()
-            ).setProfile(profile)
-                    .setAlgorithm("astar");
+            ).setProfile(request.profile()!= null ? request.profile() : "car_fastest")
+                    .setAlgorithm(algorithm);
 
+            long startNs = System.nanoTime();
             GHResponse ghResponse = hopper.route(ghRequest);
+            long endNs = System.nanoTime();
+
+            long computationTimeNs = endNs - startNs;
 
             if (!ghResponse.hasErrors()) {
                 ResponsePath path = ghResponse.getBest();
-                results.put(profile, GraphHopperMapper.toRouteResponse(path));
+                results.put(algorithm, GraphHopperMapper.toRouteResponse(path, computationTimeNs));
             } else {
                 // Optional: log or put null if route failed
-                results.put(profile, null);
+                results.put(algorithm, null);
             }
         }
 

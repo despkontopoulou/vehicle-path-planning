@@ -13,6 +13,7 @@ export default function CompareResultsPage() {
     const [sp] = useSearchParams();
     const start = useMemo(() => parseLatLng(sp.get('start')), [sp]);
     const end = useMemo(() => parseLatLng(sp.get('end')), [sp]);
+    const profile = sp.get('profile') || "car_fastest";
 
     const [routes, setRoutes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,7 +31,8 @@ export default function CompareResultsPage() {
             startLat: start.lat,
             startLon: start.lng,
             endLat: end.lat,
-            endLon: end.lng
+            endLon: end.lng,
+            profile
         })
             .then((data) => {
                 const entries = Object.entries(data.routes ?? {});
@@ -38,13 +40,14 @@ export default function CompareResultsPage() {
                     name,
                     points: (r.path ?? []).map(p => [p.lat, p.lon]),
                     totalDistanceKm: r.totalDistance,
-                    totalTimeSec: r.totalTime
+                    totalTimeSec: r.totalTime,
+                    computationTimeMs: (r.computationTimeNs ?? 0) / 1e6
                 }));
                 setRoutes(mapped);
             })
             .catch(e => setErr(e.message || 'Request failed'))
             .finally(() => setLoading(false));
-    }, [start, end]);
+    }, [start, end, profile]);
 
     if (loading) return <div>Loading results…</div>;
     if (err) return <div>Error: {err}</div>;
@@ -59,7 +62,9 @@ export default function CompareResultsPage() {
                     <h3>{r.name}</h3>
                     <MapView start={start} end={end} routes={[r]} index={idx} />
                     <p>
-                        Distance: {r.totalDistanceKm?.toFixed(2)} km, Time: {Math.round(r.totalTimeSec)} s
+                        Distance: {r.totalDistanceKm?.toFixed(2)} km,
+                        Travel Time: {Math.round(r.totalTimeSec)} s,
+                        Computation Time: {r.computationTimeMs?.toFixed(2)} ms
                     </p>
                 </div>
             ))}

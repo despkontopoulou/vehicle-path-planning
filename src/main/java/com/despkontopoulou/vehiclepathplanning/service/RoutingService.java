@@ -27,14 +27,21 @@ public class RoutingService {
             .setProfile(request.profile())
             .setAlgorithm("astar");
 
+        long startNs = System.nanoTime();
         GHResponse ghResponse = hopper.route(ghRequest);
+        long endNs = System.nanoTime();
+        long computationTimeNs = endNs - startNs;
+
+        if (ghResponse.hasErrors()) {
+            throw new RuntimeException("Routing failed: " + ghResponse.getErrors());
+        }
 
         if (ghResponse.hasErrors()) {
             throw new RuntimeException("Routing failed: " +ghResponse.getErrors());// TODO: fix error handling
         }
 
         ResponsePath path = ghResponse.getBest();
-        return GraphHopperMapper.toRouteResponse(path);
+        return GraphHopperMapper.toRouteResponse(path, computationTimeNs);
     }
 
 
