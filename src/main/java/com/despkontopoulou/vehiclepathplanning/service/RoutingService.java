@@ -2,47 +2,23 @@ package com.despkontopoulou.vehiclepathplanning.service;
 
 import com.despkontopoulou.vehiclepathplanning.model.dto.request.RouteRequest;
 import com.despkontopoulou.vehiclepathplanning.model.dto.response.RouteResponse;
-import com.despkontopoulou.vehiclepathplanning.utils.GraphHopperMapper;
-import com.graphhopper.GHRequest;
-import com.graphhopper.GHResponse;
+import com.despkontopoulou.vehiclepathplanning.utils.RoutingExecutor;
 import com.graphhopper.GraphHopper;
-import com.graphhopper.ResponsePath;
 import org.springframework.stereotype.Service;
 
 @Service
 public class RoutingService {
 
-    private final GraphHopper hopper;
+    private final RoutingExecutor executor;
 
-    public RoutingService(GraphHopper hopper) {
-        this.hopper = hopper;
+    public RoutingService(RoutingExecutor executor) {
+        this.executor = executor;
     }
 
     public RouteResponse getRoute(RouteRequest request) {
-        GHRequest ghRequest = new GHRequest(
-                request.startLat(),
-                request.startLon(),
-                request.endLat(),
-                request.endLon())
-            .setProfile(request.profile())
-            .setAlgorithm("astar");
-
-        long startNs = System.nanoTime();
-        GHResponse ghResponse = hopper.route(ghRequest);
-        long endNs = System.nanoTime();
-        long computationTimeNs = endNs - startNs;
-
-        if (ghResponse.hasErrors()) {
-            throw new RuntimeException("Routing failed: " + ghResponse.getErrors());
-        }
-
-        if (ghResponse.hasErrors()) {
-            throw new RuntimeException("Routing failed: " +ghResponse.getErrors());// TODO: fix error handling
-        }
-
-        ResponsePath path = ghResponse.getBest();
-        return GraphHopperMapper.toRouteResponse(path, computationTimeNs);
+        // Always use astar for now
+        return executor.execute(request, "astar")
+                .orElseThrow(() -> new RuntimeException("Routing failed"));
     }
-
 
 }
