@@ -12,8 +12,8 @@ export default function LandingPage() {
         <div className="landing-container">
             <FadeUpOnScroll delay={0.05}>
                 <HeroSection
-                    title="Compare and Visualize Car Routing Algorithms"
-                    subtitle="A research-backed routing app showcasing pathfinding algorithms"
+                    title="Compare and Visualize Pathfinding Algorithms"
+                    subtitle="A research-backed routing app showcasing pathfinding algorithms for multiple vehicle and routing types"
                 />
             </FadeUpOnScroll>
 
@@ -22,7 +22,8 @@ export default function LandingPage() {
                     image={modelImage}
                     paragraphs={[
                         "Built as part of my dissertation at University of Piraeus, this app lets you...",
-                        "• Explore the shortest, fastest and eco-friendly routes",
+                        "• Explore shortest or fastest routes",
+                        "• Select from various vehicle types",
                         "• Compare algorithm performance side by side",
                         "• Visualize routing on real maps",
                     ]}
