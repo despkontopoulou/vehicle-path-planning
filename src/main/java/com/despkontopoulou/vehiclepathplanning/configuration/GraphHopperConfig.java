@@ -27,8 +27,7 @@ public class GraphHopperConfig {
 
         hopper.setProfiles(List.of(
                 new Profile("car_fastest").setVehicle("car").setWeighting("fastest"),
-                new Profile("car_shortest").setVehicle("car").setWeighting("shortest"),
-                new Profile("car_eco").setVehicle("car").setWeighting("fastest") // TODO: Fix later
+                new Profile("car_shortest").setVehicle("car").setWeighting("shortest")
         ));
 
         hopper.importOrLoad();

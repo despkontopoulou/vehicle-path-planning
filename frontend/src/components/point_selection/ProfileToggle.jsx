@@ -1,8 +1,7 @@
 export default function ProfileToggle({ value, onChange }) {
     const profiles = [
         { key: "car_fastest", label: "Fastest" },
-        { key: "car_shortest", label: "Shortest" },
-        { key: "car_eco", label: "Eco" }
+        { key: "car_shortest", label: "Shortest" }
     ];
 
     return (
