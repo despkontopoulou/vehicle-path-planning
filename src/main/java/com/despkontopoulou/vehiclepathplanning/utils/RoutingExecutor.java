@@ -37,6 +37,12 @@ public class RoutingExecutor {
         }
 
         ResponsePath path = ghResponse.getBest();
-        return Optional.of(GraphHopperMapper.toRouteResponse(path, computationTimeNs));
+
+        long exploredNodes = 0;
+        if (ghResponse.getHints().has("visited_nodes.sum")) {
+            exploredNodes = ghResponse.getHints().getLong("visited_nodes.sum", 0);
+        }
+
+        return Optional.of(GraphHopperMapper.toRouteResponse(path, computationTimeNs, exploredNodes));
     }
 }

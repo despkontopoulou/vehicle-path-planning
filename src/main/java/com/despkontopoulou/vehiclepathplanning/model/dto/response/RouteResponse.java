@@ -8,5 +8,7 @@ public record RouteResponse(
     List<Coordinate> path,
     double totalDistance,
     double totalTime,
-    long computationTimeNs
+    long computationTimeNs,
+    long exploredNodes,
+    int pointsCount
 ) {}

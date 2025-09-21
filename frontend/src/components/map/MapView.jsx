@@ -2,21 +2,30 @@ import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css';
 import { startIcon, endIcon } from './customIcons';
 
-const colors = ["blue", "red", "green", "orange"];
+const colors = {
+    astar: "blue",
+    dijkstra: "red",
+    astarbi: "green",
+    dijkstrabi: "orange"
+};
 
 export default function MapView({ start, end, routes, index = 0 }) {
     const center = start || { lat: 37.9838, lng: 23.7275 };
 
     return (
-        <div style={{ marginTop: 10 }}>
-            <MapContainer center={[center.lat, center.lng]} zoom={12} style={{ height: 300, width: '100%' }}>
+        <div className="map-square">
+            <MapContainer
+                center={[center.lat, center.lng]}
+                zoom={12}
+                className="map-fill"
+            >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
                 {routes.map((r) => (
                     <Polyline
                         key={r.name}
                         positions={r.points}
-                        color={colors[index % colors.length]}
+                        color={colors[r.name]}
                         weight={5}
                     />
                 ))}

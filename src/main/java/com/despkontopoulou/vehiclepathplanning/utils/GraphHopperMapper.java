@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class GraphHopperMapper {
 
-    public static RouteResponse toRouteResponse(ResponsePath path, long computationTimeNs) {
+    public static RouteResponse toRouteResponse(ResponsePath path, long computationTimeNs, long exploredNodes) {
         double distanceKm = path.getDistance() / 1000.0;
         double timeSeconds = path.getTime() / 1000.0;
 
@@ -20,6 +20,8 @@ public class GraphHopperMapper {
                         .mapToObj(i -> new Coordinate(points.getLat(i), points.getLon(i)))
                         .collect(Collectors.toList());
 
-        return new RouteResponse(coords, distanceKm, timeSeconds, computationTimeNs);
+        int pointsCount = points.size();
+
+        return new RouteResponse(coords, distanceKm, timeSeconds, computationTimeNs, exploredNodes, pointsCount);
     }
 }

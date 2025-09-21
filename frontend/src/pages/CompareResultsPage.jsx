@@ -2,6 +2,21 @@ import { useSearchParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { compareRoutes } from '../api/routingApi';
 import MapView from '../components/map/MapView';
+import ProfileToggle from "../components/point_selection/ProfileToggle";
+import StatsTable from "../components/stats/StatsTable";
+import '../styling/CompareResults.css'
+
+const ALGO_ORDER = [
+    ["astar", "dijkstra"],
+    ["astarbi", "dijkstrabi"]
+];
+
+const ALGO_LABELS = {
+    astar: "A*",
+    dijkstra: "Dijkstra",
+    astarbi: "A* Bidirectional",
+    dijkstrabi: "Dijkstra Bidirectional"
+};
 
 function parseLatLng(param) {
     if (!param) return null;
@@ -13,7 +28,7 @@ export default function CompareResultsPage() {
     const [sp] = useSearchParams();
     const start = useMemo(() => parseLatLng(sp.get('start')), [sp]);
     const end = useMemo(() => parseLatLng(sp.get('end')), [sp]);
-    const profile = sp.get('profile') || "car_fastest";
+    const [profile, setProfile] = useState(sp.get('profile') || "car_fastest");
 
     const [routes, setRoutes] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -41,7 +56,9 @@ export default function CompareResultsPage() {
                     points: (r.path ?? []).map(p => [p.lat, p.lon]),
                     totalDistanceKm: r.totalDistance,
                     totalTimeSec: r.totalTime,
-                    computationTimeMs: (r.computationTimeNs ?? 0) / 1e6
+                    computationTimeMs: (r.computationTimeNs ?? 0) / 1e6,
+                    exploredNodes: r.exploredNodes ?? 0,
+                    pointsCount: r.pointsCount
                 }));
                 setRoutes(mapped);
             })
@@ -49,25 +66,32 @@ export default function CompareResultsPage() {
             .finally(() => setLoading(false));
     }, [start, end, profile]);
 
-    if (loading) return <div>Loading results…</div>;
-    if (err) return <div>Error: {err}</div>;
-    if (!routes.length) return <div>No routes found</div>;
+    if (loading) return <div className="status-message">Loading results…</div>;
+    if (err) return <div className="status-message">Error: {err}</div>;
+    if (!routes.length) return <div className="status-message">No routes found</div>;
 
     return (
-        <div style={{ padding: 20 }}>
-            <h2>Compare Results</h2>
+        <div className="compare-results-page">
+            <h2 className="section-title">Compare Results</h2>
+            <ProfileToggle value={profile} onChange={setProfile} />
 
-            {routes.map((r, idx) => (
-                <div key={r.name} style={{ marginBottom: 40 }}>
-                    <h3>{r.name}</h3>
-                    <MapView start={start} end={end} routes={[r]} index={idx} />
-                    <p>
-                        Distance: {r.totalDistanceKm?.toFixed(2)} km,
-                        Travel Time: {Math.round(r.totalTimeSec)} s,
-                        Computation Time: {r.computationTimeMs?.toFixed(2)} ms
-                    </p>
-                </div>
-            ))}
+            <div className="results-grid-rows">
+                {ALGO_ORDER.map((row, rowIdx) => (
+                    <div key={rowIdx} className="results-row">
+                        {row.map((algoKey) => {
+                            const r = routes.find(rt => rt.name === algoKey);
+                            if (!r) return null;
+                            return (
+                                <div key={r.name} className="result-card">
+                                    <h3 className="algo-title">{ALGO_LABELS[r.name] || r.name}</h3>
+                                    <MapView start={start} end={end} routes={[r]} index={rowIdx} />
+                                    <StatsTable results={[r]} />
+                                </div>
+                            );
+                        })}
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
