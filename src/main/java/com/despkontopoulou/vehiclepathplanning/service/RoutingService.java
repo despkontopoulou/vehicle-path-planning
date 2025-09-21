@@ -16,8 +16,8 @@ public class RoutingService {
     }
 
     public RouteResponse getRoute(RouteRequest request) {
-        // Always use astar for now
-        return executor.execute(request, "astar")
+        String algorithm = request.algorithm();
+        return executor.execute(request, algorithm)
                 .orElseThrow(() -> new RuntimeException("Routing failed"));
     }
 

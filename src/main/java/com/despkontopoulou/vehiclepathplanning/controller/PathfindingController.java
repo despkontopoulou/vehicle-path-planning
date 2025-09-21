@@ -23,14 +23,14 @@ public class PathfindingController {
         this.compareRoutingService = compareRoutingService;
     }
 
-    @GetMapping //for testing, TODO: maybe remove
+    @GetMapping
     public RouteResponse getRoute(
             @RequestParam double startLat,
             @RequestParam double startLon,
             @RequestParam double endLat,
             @RequestParam double endLon,
             @RequestParam(defaultValue = "car_fastest") String profile,
-            @RequestParam(defaultValue = "astar") String algorithm
+            @RequestParam(defaultValue = "astar")  String algorithm
     ){
         RouteRequest request = new RouteRequest(startLat, startLon, endLat, endLon, profile, algorithm);
         return routingService.getRoute(request);
@@ -43,10 +43,9 @@ public class PathfindingController {
             @RequestParam double startLon,
             @RequestParam double endLat,
             @RequestParam double endLon,
-            @RequestParam(defaultValue = "car_fastest") String profile,
-            @RequestParam(defaultValue = "astar") String algorithm
+            @RequestParam(defaultValue = "car_fastest") String profile
     ) {
-        RouteRequest request = new RouteRequest(startLat, startLon, endLat, endLon, profile, algorithm);
+        RouteRequest request = new RouteRequest(startLat, startLon, endLat, endLon, profile, null);
         return compareRoutingService.compareRoutes(request);
     }
 }

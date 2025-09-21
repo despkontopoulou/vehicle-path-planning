@@ -7,10 +7,12 @@ import SearchBar from "../components/map/SearchBar";
 import SelectedLocation from "../components/point_selection/SelectedLocation";
 import PointSelectorLayout from "../components/point_selection/PointSelectorLayout";
 import LocationSummary from "../components/point_selection/LocationSummary";
-import Instructions from "../components/point_selection/Instructions"; // ✅ new import
+import Instructions from "../components/point_selection/Instructions";
 import { setupLeafletIcons } from '../utils/leafletSetup';
 import InteractiveMap from "../components/map/InteractiveMap";
 import { forwardGeocode, reverseGeocode } from "../utils/geocoding";
+import ProfileToggle from "../components/point_selection/ProfileToggle";
+import AlgorithmToggle from "../components/point_selection/AlgorithmToggle";
 
 export default function PointSelectionPage({ onPointsSelected, mode }) {
     const [start, setStart] = useState(null);
@@ -20,6 +22,8 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     const [whichToSet, setWhichToSet] = useState('start');
     const [pendingPoint, setPendingPoint] = useState(null);
     const [pendingLabel, setPendingLabel] = useState('');
+    const [profile, setProfile] = useState(null);
+    const [algorithm, setAlgorithm] = useState(null);
 
     const mapRef = useRef(null);
 
@@ -60,7 +64,9 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     };
 
     const handleContinue = () => {
-        if (start && end) onPointsSelected(start, end);
+        if (start && end && profile && algorithm) {
+            onPointsSelected(start, end, profile, algorithm);
+        }
     };
 
     return (
@@ -68,7 +74,7 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
             <SectionTitle
                 text={mode === 'compare'
                     ? 'Select Points to Compare Algorithms'
-                    : 'Select Points for Optimal Route'}
+                    : 'Select Points to Find Route'}
             />
 
             <PointSelectorLayout
@@ -116,13 +122,21 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                 />
                             </MapWrapper>
                         </div>
+                        {mode === "single" && (
+                            <div className="toggle-section">
+                                <ProfileToggle value={profile} onChange={setProfile} />
+                                <AlgorithmToggle value={algorithm} onChange={setAlgorithm} />
+                            </div>
+                        )}
 
                         <div className="point-selector-button-container">
-                            <button onClick={handleContinue} disabled={!start || !end}>
-                                {mode === 'compare' ? "Compare Algorithms" : "Find Optimal Route"}
+                            <button
+                                onClick={handleContinue}
+                                disabled={!start || !end || (mode === "single" && (!profile || !algorithm))}
+                            >
+                                {mode === 'compare' ? "Compare Algorithms" : "Find Route"}
                             </button>
                         </div>
-
                     </div>
                 }
             />

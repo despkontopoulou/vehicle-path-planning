@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import CompareRoutePage from './pages/CompareRoutePage';
-import OptimalRoutePage from './pages/OptimalRoutePage';
+import SingleRoutePage from './pages/SingleRoutePage';
 import CompareResultsPage from './pages/CompareResultsPage';
-import OptimalResultsPage from './pages/OptimalResultsPage';
+import SingleResultsPage from './pages/SingleResultsPage';
 
 export default function App() {
     return (
@@ -11,9 +11,9 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<LandingPage />} />
                 <Route path="/compare" element={<CompareRoutePage />} />
-                <Route path="/optimal" element={<OptimalRoutePage />} />
+                <Route path="/single" element={<SingleRoutePage />} />
                 <Route path="/compare/results" element={<CompareResultsPage />} />
-                <Route path="/optimal/results" element={<OptimalResultsPage />} />
+                <Route path="/single/results" element={<SingleResultsPage />} />
                 <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>
         </BrowserRouter>

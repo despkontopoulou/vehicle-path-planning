@@ -9,7 +9,6 @@ export function formatDuration(seconds) {
     if (hrs > 0) parts.push(`${hrs} hr${hrs > 1 ? "s" : ""}`);
     if (mins > 0) parts.push(`${mins} min${mins > 1 ? "s" : ""}`);
     if (secs > 0 && hrs === 0) parts.push(`${secs} s`);
-    // Show seconds only if < 1 hr, so 2 hr 5 min instead of 2 hr 5 min 13 s
 
     return parts.join(" ");
 }

@@ -250,3 +250,11 @@
     width: 100%;
     max-width: 300px;   /* match left pane width */
 }
+
+.toggle-section {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px auto;
+    flex-wrap: wrap;
+}
