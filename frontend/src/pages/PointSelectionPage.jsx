@@ -13,6 +13,7 @@ import InteractiveMap from "../components/map/InteractiveMap";
 import { forwardGeocode, reverseGeocode } from "../utils/geocoding";
 import ProfileToggle from "../components/point_selection/ProfileToggle";
 import AlgorithmToggle from "../components/point_selection/AlgorithmToggle";
+import VehicleToggle from "../components/point_selection/VehicleToggle";
 
 export default function PointSelectionPage({ onPointsSelected, mode }) {
     const [start, setStart] = useState(null);
@@ -22,8 +23,9 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     const [whichToSet, setWhichToSet] = useState('start');
     const [pendingPoint, setPendingPoint] = useState(null);
     const [pendingLabel, setPendingLabel] = useState('');
-    const [profile, setProfile] = useState(null);
-    const [algorithm, setAlgorithm] = useState(null);
+    const [vehicle, setVehicle] = useState("car");
+    const [routingPref, setRoutingPref] = useState("fastest");
+    const [algorithm, setAlgorithm] = useState(null);;
 
     const mapRef = useRef(null);
 
@@ -64,10 +66,18 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     };
 
     const handleContinue = () => {
-        if (start && end && profile && algorithm) {
-            onPointsSelected(start, end, profile, algorithm);
+        if (start && end && vehicle && routingPref) {
+            const profile = `${vehicle}_${routingPref}`;
+            if (mode === "single") {
+                if (algorithm) {
+                    onPointsSelected(start, end, profile, algorithm);
+                }
+            } else {
+                onPointsSelected(start, end, profile); // ✅ no algorithm needed
+            }
         }
     };
+
 
     return (
         <div className="point-selector-container">
@@ -122,17 +132,25 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                 />
                             </MapWrapper>
                         </div>
-                        {mode === "single" && (
-                            <div className="toggle-section">
-                                <ProfileToggle value={profile} onChange={setProfile} />
+                        <div className="toggle-section">
+                            <VehicleToggle value={vehicle} onChange={setVehicle} />
+                            <ProfileToggle value={routingPref} onChange={setRoutingPref} />
+
+                            {mode === "single" && (
                                 <AlgorithmToggle value={algorithm} onChange={setAlgorithm} />
-                            </div>
-                        )}
+                            )}
+                        </div>
 
                         <div className="point-selector-button-container">
                             <button
                                 onClick={handleContinue}
-                                disabled={!start || !end || (mode === "single" && (!profile || !algorithm))}
+                                disabled={
+                                    !start ||
+                                    !end ||
+                                    !vehicle ||
+                                    !routingPref ||
+                                    (mode === "single" && !algorithm)
+                                }
                             >
                                 {mode === 'compare' ? "Compare Algorithms" : "Find Route"}
                             </button>

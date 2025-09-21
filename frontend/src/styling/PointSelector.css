@@ -258,3 +258,38 @@
     margin: 20px auto;
     flex-wrap: wrap;
 }
+
+.vehicle-toggle {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.vehicle-toggle label {
+    margin-right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--primary-text);
+}
+
+.vehicle-toggle button {
+    margin-right: 10px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: var(--card-bg);
+    color: var(--primary-text);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.vehicle-toggle button:hover {
+    background: #e6e6e6;
+}
+
+.vehicle-toggle button.active {
+    border: 2px solid var(--secondary-text);
+    background: var(--secondary-text);
+    color: white;
+}
+
