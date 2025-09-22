@@ -1,0 +1,127 @@
+.compare-results-page{
+    padding-left: 8%;
+    padding-right: 8%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.algo-title {
+    text-align: center;
+    font-size: 25px;
+    margin-bottom: 15px;
+    margin-top: 0px;
+    color: var(--primary-text);
+}
+
+.results-grid-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    margin-top: 30px;
+}
+
+.results-row {
+    display: flex;
+    justify-content: center;   /* center the cards as a group */
+    gap: 40px;                 /* horizontal spacing */
+    max-width: 1500px;
+    margin: 0 auto;
+    flex-wrap: wrap;           /* allow wrapping if needed */
+    transition: all 0.3s ease; /* smooth row adjustments */
+}
+
+.result-card {
+    background: var(--card-bg);
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    flex: 1 1 0;               /* cards share available space */
+    max-width: 700px;          /* don’t let them stretch too wide */
+}
+
+/* Responsive: stack cards on small screens */
+@media (max-width: 900px) {
+    .results-row {
+        flex-direction: column;
+        align-items: center;   /* keep stacked cards centered */
+    }
+
+    .result-card {
+        width: 90%;            /* make them nicely sized when stacked */
+        max-width: 600px;      /* keep consistent */
+    }
+}
+
+.map-square {
+    width: 100%;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+/* Let the Leaflet map fill the wrapper */
+.map-fill {
+    width: 100%;
+    height: 100%;
+}
+
+/* Modern browsers: perfect square */
+@supports (aspect-ratio: 1 / 1) {
+    .map-square {
+        aspect-ratio: 1 / 1;
+    }
+}
+
+/* Fallback for older browsers */
+@supports not (aspect-ratio: 1 / 1) {
+    .map-square {
+        padding-top: 100%; /* height = width */
+    }
+    .map-square .map-fill {
+        position: absolute;
+        inset: 0;
+    }
+}
+
+.status-message {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 500;
+    margin-top: 100px; /* push it down a bit */
+    color: var(--secondary-text); /* soft green from your palette */
+}
+
+/* --- Profile Toggle --- */
+.profile-toggle {
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.profile-toggle label {
+    margin-right: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--primary-text);
+}
+
+.profile-toggle button {
+    margin-right: 10px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: var(--card-bg);
+    color: var(--primary-text);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-toggle button:hover {
+    background: #e6e6e6;
+}
+
+.profile-toggle button.active {
+    border: 2px solid var(--secondary-text);
+    background: var(--secondary-text);
+    color: white;
+}

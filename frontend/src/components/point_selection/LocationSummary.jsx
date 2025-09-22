@@ -1,12 +1,12 @@
-export default function LocationSummary({ start, end, onChange }) {
+export default function LocationSummary({ start, end }) {
     return (
         <div className="location-summary-card">
             <h3>Selected Locations</h3>
             <div>
-                <p onClick={() => onChange('start')}>
+                <p>
                     <strong>Start:</strong> {start || 'Not selected'}
                 </p>
-                <p onClick={() => onChange('end')}>
+                <p>
                     <strong>End:</strong> {end || 'Not selected'}
                 </p>
             </div>

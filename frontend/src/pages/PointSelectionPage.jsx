@@ -1,42 +1,31 @@
 import { useEffect, useRef, useState } from 'react';
-import {
-    MapContainer,
-    TileLayer,
-    Marker,
-    Popup
-} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import '../styling/PointSelector.css';
-
-import PointMarkers from '../components/map/PointMarkers';
-import { startIcon, endIcon } from '../components/map/customIcons';
 import SectionTitle from '../components/point_selection/SectionTitle';
 import MapWrapper from '../components/map/MapWrapper';
 import SearchBar from "../components/map/SearchBar";
 import SelectedLocation from "../components/point_selection/SelectedLocation";
 import PointSelectorLayout from "../components/point_selection/PointSelectorLayout";
 import LocationSummary from "../components/point_selection/LocationSummary";
+import Instructions from "../components/point_selection/Instructions";
 import { setupLeafletIcons } from '../utils/leafletSetup';
 import InteractiveMap from "../components/map/InteractiveMap";
-import {forwardGeocode, reverseGeocode} from "../utils/geocoding";
+import { forwardGeocode, reverseGeocode } from "../utils/geocoding";
+import ProfileToggle from "../components/point_selection/ProfileToggle";
+import AlgorithmToggle from "../components/point_selection/AlgorithmToggle";
 
 export default function PointSelectionPage({ onPointsSelected, mode }) {
     const [start, setStart] = useState(null);
     const [end, setEnd] = useState(null);
     const [startLabel, setStartLabel] = useState('');
     const [endLabel, setEndLabel] = useState('');
-    const [whichToSet, setWhichToSet] = useState('start'); // control which point is being set
-
+    const [whichToSet, setWhichToSet] = useState('start');
     const [pendingPoint, setPendingPoint] = useState(null);
     const [pendingLabel, setPendingLabel] = useState('');
+    const [profile, setProfile] = useState(null);
+    const [algorithm, setAlgorithm] = useState(null);
 
     const mapRef = useRef(null);
-
-    // useEffect(() => {
-    //     setTimeout(() => {
-    //         mapRef.current?.invalidateSize();
-    //     }, 300);
-    // }, []);
 
     useEffect(() => {
         setupLeafletIcons();
@@ -57,7 +46,7 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
         const latlng = { lat: result.lat, lng: result.lng };
         setPendingPoint(latlng);
         setPendingLabel(result.label);
-        mapRef.current?.flyTo(latlng, 17); // bigger zoom on search
+        mapRef.current?.flyTo(latlng, 17);
     };
 
     const confirmPoint = () => {
@@ -65,7 +54,7 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
         if (whichToSet === 'start') {
             setStart(pendingPoint);
             setStartLabel(pendingLabel);
-            setWhichToSet('end'); // switch to placing end next
+            setWhichToSet('end');
         } else {
             setEnd(pendingPoint);
             setEndLabel(pendingLabel);
@@ -75,41 +64,32 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     };
 
     const handleContinue = () => {
-        if (start && end) onPointsSelected(start, end);
+        if (start && end && profile && algorithm) {
+            onPointsSelected(start, end, profile, algorithm);
+        }
     };
 
     return (
         <div className="point-selector-container">
-            <SectionTitle text={mode === 'compare' ? 'Select Points to Compare Algorithms' : 'Select Points for Optimal Route'} />
+            <SectionTitle
+                text={mode === 'compare'
+                    ? 'Select Points to Compare Algorithms'
+                    : 'Select Points to Find Route'}
+            />
 
             <PointSelectorLayout
                 left={
-                    <LocationSummary
-                        start={startLabel}
-                        end={endLabel}
-                        onChange={(which) => {
-                            setWhichToSet(which);
-                            setPendingPoint(null);
-                            setPendingLabel('');
-                        }}
-                    />
-                }
-                right={
-                    <>
-                        {/* SearchBar OUTSIDE the map */}
-                        <div style={{ margin: '0 20px 10px' }}>
-                            <SearchBar onSearch={handleSearch} />
-                        </div>
-
-                        <MapWrapper>
-                            <InteractiveMap
-                                ref={mapRef}
-                                start={start}
-                                end={end}
-                                pendingPoint={pendingPoint}
-                                onMapClick={handleMapClick}
-                            />
-                        </MapWrapper>
+                    <div className="left-pane-cards">
+                        <LocationSummary
+                            start={startLabel}
+                            end={endLabel}
+                            onChange={(which) => {
+                                setWhichToSet(which);
+                                setPendingPoint(null);
+                                setPendingLabel('');
+                            }}
+                        />
+                        <Instructions mode={mode} />
 
                         {pendingPoint && (
                             <div className="selected-location-container">
@@ -123,13 +103,41 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                 />
                             </div>
                         )}
+                    </div>
+                }
+                right={
+                    <div className="map-section">
+                        <div className="search-bar-container">
+                            <SearchBar onSearch={handleSearch} />
+                        </div>
+
+                        <div className="map-card">
+                            <MapWrapper>
+                                <InteractiveMap
+                                    ref={mapRef}
+                                    start={start}
+                                    end={end}
+                                    pendingPoint={pendingPoint}
+                                    onMapClick={handleMapClick}
+                                />
+                            </MapWrapper>
+                        </div>
+                        {mode === "single" && (
+                            <div className="toggle-section">
+                                <ProfileToggle value={profile} onChange={setProfile} />
+                                <AlgorithmToggle value={algorithm} onChange={setAlgorithm} />
+                            </div>
+                        )}
 
                         <div className="point-selector-button-container">
-                            <button onClick={handleContinue} disabled={!start || !end}>
-                                Continue
+                            <button
+                                onClick={handleContinue}
+                                disabled={!start || !end || (mode === "single" && (!profile || !algorithm))}
+                            >
+                                {mode === 'compare' ? "Compare Algorithms" : "Find Route"}
                             </button>
                         </div>
-                    </>
+                    </div>
                 }
             />
         </div>

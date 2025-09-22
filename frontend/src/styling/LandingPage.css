@@ -63,62 +63,6 @@ body {
     background-color: #ABB39B;
     margin: 20px auto 150px auto;
 }
-.card-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 40px;
-    width: 100%;
-    margin-top: 10%;
-    margin-bottom: 10%;
-}
-
-.card {
-    background-color: var(--card-bg);
-    border-radius: 40px;
-    width: 500px;
-    height: 700px;
-    padding:40px;
-    margin: 10px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* center title */
-    flex-direction: column;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-
-.card:hover {
-    background-color: #f6f4f5;
-    transform: scale(1.03); /* slightly larger */
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
-}
-
-.card:hover .card-arrow {
-    transform: translateX(35px);
-    color: var(--primary-text);
-}
-.card:hover .card-title {
-    color: var(--primary-text);
-    font-size: 60px;
-}
-
-.card-title {
-    color: var(--secondary-text);
-    font-size: 56px;
-    text-align: center;
-    font-weight: 200;
-    transition: transform 0.5s ease;
-}
-
-.card-arrow {
-    position: absolute;
-    right: 50px;
-    bottom: 30px;
-    color: var(--secondary-text);
-    transition: transform 0.5s ease;
-}
 
 .intro-sub {
     max-width: 700px;

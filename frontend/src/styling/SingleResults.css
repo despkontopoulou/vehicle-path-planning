@@ -1,0 +1,37 @@
+.single-results-page {
+    padding-left: 8%;
+    padding-right: 8%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+
+.single-result-card {
+    background: var(--card-bg);
+    padding: 24px;
+    border-radius: 20px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+    max-width: 1000px;
+    margin: 40px auto; /* center the card */
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.single-result-card .map-square {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.result-header {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.result-header h3 {
+    font-size: 25px;
+    font-weight: 600;
+    color: var(--primary-text);
+    margin: 0;
+}

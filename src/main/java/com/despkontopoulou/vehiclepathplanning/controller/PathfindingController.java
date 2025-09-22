@@ -1,54 +1,51 @@
 package com.despkontopoulou.vehiclepathplanning.controller;
 
-import com.despkontopoulou.vehiclepathplanning.model.AlgorithmType;
-import com.despkontopoulou.vehiclepathplanning.model.Coordinate;
-import com.despkontopoulou.vehiclepathplanning.model.PathResult;
-import com.despkontopoulou.vehiclepathplanning.model.RoutePreference;
-import com.despkontopoulou.vehiclepathplanning.service.PathfindingService;
+import com.despkontopoulou.vehiclepathplanning.model.dto.request.RouteRequest;
+import com.despkontopoulou.vehiclepathplanning.model.dto.response.CompareRouteResponse;
+import com.despkontopoulou.vehiclepathplanning.model.dto.response.RouteResponse;
+import com.despkontopoulou.vehiclepathplanning.service.CompareRoutingService;
+import com.despkontopoulou.vehiclepathplanning.service.RoutingService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/api/routes")
 public class PathfindingController {
-    private final PathfindingService service;
 
-    public PathfindingController(PathfindingService service) {
-        this.service = service;
+    private RoutingService routingService;
+    private CompareRoutingService compareRoutingService;
+
+    public PathfindingController(RoutingService routingService,
+                                 CompareRoutingService compareRoutingService) {
+        this.routingService = routingService;
+        this.compareRoutingService = compareRoutingService;
     }
 
     @GetMapping
-    public PathResult route(
+    public RouteResponse getRoute(
             @RequestParam double startLat,
             @RequestParam double startLon,
-            @RequestParam double goalLat,
-            @RequestParam double goalLon,
-            @RequestParam RoutePreference pref,
-            @RequestParam AlgorithmType algorithm) {
-        return service.findRoute(startLat,startLon,goalLat,goalLon, pref, algorithm);
+            @RequestParam double endLat,
+            @RequestParam double endLon,
+            @RequestParam(defaultValue = "car_fastest") String profile,
+            @RequestParam(defaultValue = "astar")  String algorithm
+    ){
+        RouteRequest request = new RouteRequest(startLat, startLon, endLat, endLon, profile, algorithm);
+        return routingService.getRoute(request);
     }
 
+    // GET /api/routes/compare
     @GetMapping("/compare")
-    public Map<String, PathResult> compare(
+    public CompareRouteResponse compareRoutes(
             @RequestParam double startLat,
             @RequestParam double startLon,
-            @RequestParam double goalLat,
-            @RequestParam double goalLon,
-            @RequestParam RoutePreference pref){
-        return service.compareRoutes(startLat,startLon,goalLat,goalLon, pref);
-    }
-
-    @GetMapping("/best")
-    public PathResult best(
-            @RequestParam double startLat,
-            @RequestParam double startLon,
-            @RequestParam double goalLat,
-            @RequestParam double goalLon,
-            @RequestParam RoutePreference pref) {
-        return service.bestRoute(startLat,startLon,goalLat,goalLon,pref);
+            @RequestParam double endLat,
+            @RequestParam double endLon,
+            @RequestParam(defaultValue = "car_fastest") String profile
+    ) {
+        RouteRequest request = new RouteRequest(startLat, startLon, endLat, endLon, profile, null);
+        return compareRoutingService.compareRoutes(request);
     }
 }

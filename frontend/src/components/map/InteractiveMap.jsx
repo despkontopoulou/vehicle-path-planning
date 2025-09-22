@@ -1,7 +1,6 @@
 import { forwardRef, useImperativeHandle } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
 import { startIcon, endIcon, pendingIcon } from './customIcons';
-import PointMarkers from "./PointMarkers";
 
 function MapClickHandler({ onClick }) {
     useMapEvents({

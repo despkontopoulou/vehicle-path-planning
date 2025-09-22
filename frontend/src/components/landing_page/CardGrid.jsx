@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import '../../styling/CardGrid.css';
 
 export default function CardGrid({ cards, routes }) {
     const navigate = useNavigate();
@@ -11,7 +12,6 @@ export default function CardGrid({ cards, routes }) {
                     key={idx}
                     className="card"
                     onClick={() => navigate(routes[idx])}
-                    style={{ cursor: 'pointer' }}
                 >
                     <h2 className="card-title">{card}</h2>
                     <ArrowRight className="card-arrow" size={32} />

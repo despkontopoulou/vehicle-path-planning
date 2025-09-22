@@ -1,12 +1,28 @@
 import axios from 'axios';
-const client = axios.create({ baseURL: '/api/routes' });
-//use axios for automatic json parsin, req resp handling and simplified error handling
-export function findRoute(params) {
-    return client.get('', { params }).then(res => res.data);
-}
+const client = axios.create({
+        baseURL: '/api/routes' ,
+        headers: { Accept: 'application/json' }});
+
 export function compareRoutes(params) {
-    return client.get('compare', { params }).then(res => res.data);
+    return client.get('compare', {
+        params: {
+            startLat: params.startLat,
+            startLon: params.startLon,
+            endLat: params.endLat,
+            endLon: params.endLon,
+            profile: params.profile
+        }
+    }).then(res => res.data);
 }
-export function bestRoute(params) {
-    return client.get('best', { params }).then(res => res.data);
+export function singleRoute(params) {
+    return client.get('', {
+        params: {
+            startLat: params.startLat,
+            startLon: params.startLon,
+            endLat: params.endLat,
+            endLon: params.endLon,
+            profile: params.profile,
+            algorithm: params.algorithm
+        }
+    }).then(res => res.data);
 }

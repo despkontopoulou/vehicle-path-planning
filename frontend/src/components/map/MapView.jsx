@@ -1,27 +1,46 @@
-import {MapContainer, Marker, Popup, TileLayer} from "react-leaflet";
-import PointMarkers from "./PointMarkers";
-import {endIcon, startIcon} from "./customIcons";
+import { MapContainer, TileLayer, Polyline, Marker, Popup } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import { startIcon, endIcon } from './customIcons';
 
-return
-<MapContainer
-    center={[37.9838, 23.7275]}
-    zoom={13}
-    className="leaflet-container"
-    ref={mapRef}
->
-    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-    <PointMarkers
-        setPendingPoint={setPendingPoint}
-        setPendingLabel={setPendingLabel}
-    />
-    {start && (
-        <Marker position={start} icon={startIcon}>
-            <Popup>Start Point</Popup>
-        </Marker>
-    )}
-    {end && (
-        <Marker position={end} icon={endIcon}>
-            <Popup>End Point</Popup>
-        </Marker>
-    )}
-</MapContainer>
+const colors = {
+    astar: "blue",
+    dijkstra: "red",
+    astarbi: "green",
+    dijkstrabi: "orange"
+};
+
+export default function MapView({ start, end, routes, index = 0 }) {
+    const center = start || { lat: 37.9838, lng: 23.7275 };
+
+    return (
+        <div className="map-square">
+            <MapContainer
+                center={[center.lat, center.lng]}
+                zoom={12}
+                className="map-fill"
+            >
+                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+                {routes.map((r) => (
+                    <Polyline
+                        key={r.name}
+                        positions={r.points}
+                        color={colors[r.name]}
+                        weight={5}
+                    />
+                ))}
+
+                {start && (
+                    <Marker position={[start.lat, start.lng]} icon={startIcon}>
+                        <Popup>Start</Popup>
+                    </Marker>
+                )}
+                {end && (
+                    <Marker position={[end.lat, end.lng]} icon={endIcon}>
+                        <Popup>End</Popup>
+                    </Marker>
+                )}
+            </MapContainer>
+        </div>
+    );
+}
