@@ -1,10 +1,19 @@
 package com.despkontopoulou.vehiclepathplanning.controller;
 
+import com.despkontopoulou.vehiclepathplanning.model.dto.request.MultiRouteRequest;
 import com.despkontopoulou.vehiclepathplanning.model.dto.request.RouteRequest;
+import com.despkontopoulou.vehiclepathplanning.model.dto.request.StatsRequest;
 import com.despkontopoulou.vehiclepathplanning.model.dto.response.CompareRouteResponse;
 import com.despkontopoulou.vehiclepathplanning.model.dto.response.RouteResponse;
+import com.despkontopoulou.vehiclepathplanning.model.dto.response.StatsResponse;
 import com.despkontopoulou.vehiclepathplanning.service.CompareRoutingService;
+import com.despkontopoulou.vehiclepathplanning.service.MultiRoutingService;
 import com.despkontopoulou.vehiclepathplanning.service.RoutingService;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.despkontopoulou.vehiclepathplanning.service.StatsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,13 +23,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/routes")
 public class PathfindingController {
 
+    private final StatsService statsService;
+    private MultiRoutingService multiRoutingService;
     private RoutingService routingService;
     private CompareRoutingService compareRoutingService;
 
     public PathfindingController(RoutingService routingService,
-                                 CompareRoutingService compareRoutingService) {
+                                 CompareRoutingService compareRoutingService,
+                                 MultiRoutingService multiRoutingService, StatsService statsService) {
         this.routingService = routingService;
         this.compareRoutingService = compareRoutingService;
+        this.multiRoutingService = multiRoutingService;
+        this.statsService = statsService;
     }
 
     @GetMapping
@@ -47,5 +61,44 @@ public class PathfindingController {
     ) {
         RouteRequest request = new RouteRequest(startLat, startLon, endLat, endLon, profile, null);
         return compareRoutingService.compareRoutes(request);
+    }
+
+    @GetMapping("/multi")
+    public RouteResponse getRouteWithWaypoints(
+            @RequestParam double startLat,
+            @RequestParam double startLon,
+            @RequestParam double endLat,
+            @RequestParam double endLon,
+            @RequestParam(required = false) List<Double> viaLat,
+            @RequestParam(required = false) List<Double> viaLon,
+            @RequestParam(defaultValue = "car_fastest") String profile,
+            @RequestParam(defaultValue = "astar") String algorithm
+    ) {
+        List<double[]> waypoints = new ArrayList<>();
+        if (viaLat != null && viaLon != null && viaLat.size() == viaLon.size()) {
+            for (int i = 0; i < viaLat.size(); i++) {
+                waypoints.add(new double[]{viaLat.get(i), viaLon.get(i)});
+            }
+        }
+
+        MultiRouteRequest request = new MultiRouteRequest(
+                startLat, startLon, endLat, endLon, waypoints, profile, algorithm
+        );
+
+        return multiRoutingService.getMultiRoute(request);
+    }
+
+    @GetMapping("/stats")
+    public StatsResponse getStats(
+            @RequestParam double startLat,
+            @RequestParam double startLon,
+            @RequestParam double endLat,
+            @RequestParam double endLon,
+            @RequestParam List<String> vehicles,
+            @RequestParam List<String> profiles,
+            @RequestParam List<String> algorithms
+    ) {
+        StatsRequest request = new StatsRequest(startLat, startLon, endLat, endLon, vehicles, profiles, algorithms);
+        return statsService.runStats(request);
     }
 }
