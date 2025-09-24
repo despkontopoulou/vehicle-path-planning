@@ -3,8 +3,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { compareRoutes } from '../api/routingApi';
 import MapView from '../components/map/MapView';
 import ProfileToggle from "../components/point_selection/ProfileToggle";
+import VehicleToggle from "../components/point_selection/VehicleToggle";
 import StatsTable from "../components/stats/StatsTable";
-import '../styling/CompareResults.css'
+import '../styling/CompareResults.css';
 
 const ALGO_ORDER = [
     ["astar", "dijkstra"],
@@ -28,11 +29,17 @@ export default function CompareResultsPage() {
     const [sp] = useSearchParams();
     const start = useMemo(() => parseLatLng(sp.get('start')), [sp]);
     const end = useMemo(() => parseLatLng(sp.get('end')), [sp]);
-    const [profile, setProfile] = useState(sp.get('profile') || "car_fastest");
+
+    // Split initial profile from URL into vehicle + routing preference
+    const initialProfile = sp.get('profile') || "car_fastest";
+    const [vehicle, setVehicle] = useState(initialProfile.split("_")[0]);   // e.g. "car"
+    const [routingPref, setRoutingPref] = useState(initialProfile.split("_")[1]); // e.g. "fastest"
 
     const [routes, setRoutes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
+
+    const profile = `${vehicle}_${routingPref}`;
 
     useEffect(() => {
         if (!start || !end) {
@@ -64,7 +71,7 @@ export default function CompareResultsPage() {
             })
             .catch(e => setErr(e.message || 'Request failed'))
             .finally(() => setLoading(false));
-    }, [start, end, profile]);
+    }, [start, end, vehicle, routingPref]);
 
     if (loading) return <div className="status-message">Loading results…</div>;
     if (err) return <div className="status-message">Error: {err}</div>;
@@ -73,7 +80,12 @@ export default function CompareResultsPage() {
     return (
         <div className="compare-results-page">
             <h2 className="section-title">Compare Results</h2>
-            <ProfileToggle value={profile} onChange={setProfile} />
+
+            {/* Vehicle + Routing Toggles */}
+            <div className="toggle-section">
+                <VehicleToggle value={vehicle} onChange={setVehicle} />
+                <ProfileToggle value={routingPref} onChange={setRoutingPref} />
+            </div>
 
             <div className="results-grid-rows">
                 {ALGO_ORDER.map((row, rowIdx) => (
