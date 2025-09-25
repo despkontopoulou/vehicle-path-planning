@@ -1,6 +1,6 @@
 import { forwardRef, useImperativeHandle } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents } from 'react-leaflet';
-import { startIcon, endIcon, pendingIcon } from './customIcons';
+import { startIcon, endIcon, pendingIcon, waypointIcon } from './customIcons';
 
 function MapClickHandler({ onClick }) {
     useMapEvents({
@@ -19,7 +19,7 @@ function FlyController(_props, ref) {
 const FlyControllerWithRef = forwardRef(FlyController);
 
 const InteractiveMap = forwardRef(function InteractiveMap(
-    { start, end, pendingPoint, onMapClick, initialCenter = { lat: 37.9838, lng: 23.7275 }, initialZoom = 13 },
+    { start, end, waypoints=[], pendingPoint, onMapClick, initialCenter = { lat: 37.9838, lng: 23.7275 }, initialZoom = 13 },
     ref
 ) {
     return (
@@ -34,6 +34,13 @@ const InteractiveMap = forwardRef(function InteractiveMap(
                 </Marker>
             )}
             {start && <Marker position={start} icon={startIcon}><Popup>Start Point</Popup></Marker>}
+
+            {waypoints.map((wp, idx) => (
+                <Marker key={`${wp.lat},${wp.lng},${idx}`} position={wp} icon={waypointIcon}>
+                    <Popup>Waypoint {idx + 1}</Popup>
+                </Marker>
+            ))}
+
             {end && <Marker position={end} icon={endIcon}><Popup>End Point</Popup></Marker>}
         </MapContainer>
     );

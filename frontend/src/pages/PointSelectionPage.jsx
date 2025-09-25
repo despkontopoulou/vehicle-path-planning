@@ -14,6 +14,7 @@ import { forwardGeocode, reverseGeocode } from "../utils/geocoding";
 import ProfileToggle from "../components/point_selection/ProfileToggle";
 import AlgorithmToggle from "../components/point_selection/AlgorithmToggle";
 import VehicleToggle from "../components/point_selection/VehicleToggle";
+import WaypointSummary from "../components/point_selection/WaypointSummary";
 
 export default function PointSelectionPage({ onPointsSelected, mode }) {
     const [start, setStart] = useState(null);
@@ -25,7 +26,10 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     const [pendingLabel, setPendingLabel] = useState('');
     const [vehicle, setVehicle] = useState("car");
     const [routingPref, setRoutingPref] = useState("fastest");
-    const [algorithm, setAlgorithm] = useState(null);;
+    const [algorithm, setAlgorithm] = useState(null);
+    const [waypoints, setWaypoints] = useState([]);
+    const [waypointLabels, setWaypointLabels] = useState([]);
+
 
     const mapRef = useRef(null);
 
@@ -53,30 +57,40 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
 
     const confirmPoint = () => {
         if (!pendingPoint) return;
-        if (whichToSet === 'start') {
+
+        if (whichToSet === "start") {
             setStart(pendingPoint);
             setStartLabel(pendingLabel);
-            setWhichToSet('end');
-        } else {
+            setWhichToSet("end");
+        } else if (whichToSet === "end") {
             setEnd(pendingPoint);
             setEndLabel(pendingLabel);
+            setWhichToSet("waypoint");
+        } else if (whichToSet === "waypoint") {
+            setWaypoints([...waypoints, pendingPoint]);
+            setWaypointLabels([...waypointLabels, pendingLabel]);
         }
+
         setPendingPoint(null);
-        setPendingLabel('');
+        setPendingLabel("");
     };
 
     const handleContinue = () => {
-        if (start && end && vehicle && routingPref) {
-            const profile = `${vehicle}_${routingPref}`;
-            if (mode === "single") {
-                if (algorithm) {
-                    onPointsSelected(start, end, profile, algorithm);
-                }
-            } else {
-                onPointsSelected(start, end, profile); // ✅ no algorithm needed
-            }
+        const profile = `${vehicle}_${routingPref}`;
+        if (!start || !end || !vehicle || !routingPref) return;
+
+        if (mode === "single") {
+            if (algorithm) onPointsSelected(start, end, profile, algorithm);
+        } else if (mode === "compare") {
+            onPointsSelected(start, end, profile);
+        } else if (mode === "multi") {
+            if (algorithm) onPointsSelected(start, end, waypoints, profile, algorithm);
+        } else if (mode === "multiCompare") {
+            onPointsSelected(start, end, waypoints, profile);
         }
     };
+
+
 
 
     return (
@@ -99,6 +113,31 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                 setPendingLabel('');
                             }}
                         />
+                        {(mode === "multi" || mode === "multiCompare") && (
+                            <WaypointSummary
+                                waypoints={waypoints}
+                                labels={waypointLabels}
+                                onRemove={(idx) => {
+                                    setWaypoints(waypoints.filter((_, i) => i !== idx));
+                                    setWaypointLabels(waypointLabels.filter((_, i) => i !== idx));
+                                }}
+                                onReorder={(from, to) => {
+                                    const reorderedWps = [...waypoints];
+                                    const reorderedLabels = [...waypointLabels];
+
+                                    const [movedWp] = reorderedWps.splice(from, 1);
+                                    const [movedLabel] = reorderedLabels.splice(from, 1);
+
+                                    reorderedWps.splice(to, 0, movedWp);
+                                    reorderedLabels.splice(to, 0, movedLabel);
+
+                                    setWaypoints(reorderedWps);
+                                    setWaypointLabels(reorderedLabels);
+                                }}
+                            />
+
+                        )}
+
                         <Instructions mode={mode} />
 
                         {pendingPoint && (
@@ -129,6 +168,7 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                     end={end}
                                     pendingPoint={pendingPoint}
                                     onMapClick={handleMapClick}
+                                    waypoints={waypoints}
                                 />
                             </MapWrapper>
                         </div>
@@ -136,7 +176,7 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                             <VehicleToggle value={vehicle} onChange={setVehicle} />
                             <ProfileToggle value={routingPref} onChange={setRoutingPref} />
 
-                            {mode === "single" && (
+                            {(mode === "single" || mode === "multi") && (
                                 <AlgorithmToggle value={algorithm} onChange={setAlgorithm} />
                             )}
                         </div>
@@ -145,14 +185,15 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                             <button
                                 onClick={handleContinue}
                                 disabled={
-                                    !start ||
-                                    !end ||
-                                    !vehicle ||
-                                    !routingPref ||
-                                    (mode === "single" && !algorithm)
+                                    !start || !end ||
+                                    !vehicle || !routingPref ||
+                                    ((mode === "single" || mode === "multi") && !algorithm)
                                 }
                             >
-                                {mode === 'compare' ? "Compare Algorithms" : "Find Route"}
+                                {mode === 'compare' ? "Compare Algorithms" :
+                                    mode === 'multi' ? "Find Multi-Route" :
+                                        mode === 'multiCompare' ? "Compare Multi-Algorithms" :
+                                            "Find Route"}
                             </button>
                         </div>
                     </div>

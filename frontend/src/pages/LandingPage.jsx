@@ -43,13 +43,17 @@ export default function LandingPage() {
             <FadeUpOnScroll delay={0.5}>
                 <CardGrid
                     cards={[
-                    "Compare Algorithms & Profiles",
-                    "Find Route",
-                    "Read Project Overview"
+                        "Find Route",
+                        "Compare Algorithms & Profiles",
+                        "Find Route with Waypoints",
+                        "Compare Algorithms & Profiles with Waypoints",
+                        "Read Project Overview"
                 ]}
                   routes={[
-                      "/compare",      // goes to CompareRoutePage
-                      "/single",         // goes to SingleRoutePage
+                      "/single",
+                      "/compare",
+                      "/multi",
+                      "/multi/compare",
                       "/about"
                   ]}
                 />
