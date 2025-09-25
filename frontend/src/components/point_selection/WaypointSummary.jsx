@@ -13,7 +13,7 @@ export default function WaypointSummary({ waypoints, labels, onRemove, onReorder
     };
 
     const handleDragOver = (e) => {
-        e.preventDefault(); // allows dropping
+        e.preventDefault();
     };
 
     return (

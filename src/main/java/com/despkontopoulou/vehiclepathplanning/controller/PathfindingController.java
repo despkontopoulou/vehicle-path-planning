@@ -28,7 +28,9 @@ public class PathfindingController {
 
     public PathfindingController(RoutingService routingService,
                                  CompareRoutingService compareRoutingService,
-                                 MultiRoutingService multiRoutingService,CompareMultiRoutingService compareMultiRoutingService,StatsService statsService) {
+                                 MultiRoutingService multiRoutingService,
+                                 CompareMultiRoutingService compareMultiRoutingService,
+                                 StatsService statsService) {
         this.routingService = routingService;
         this.compareRoutingService = compareRoutingService;
         this.multiRoutingService = multiRoutingService;

@@ -13,7 +13,6 @@
     padding-bottom: 2%;
 }
 
-/* Layout container */
 .point-selector-layout {
     display: grid;
     grid-template-columns: 300px 1fr 300px;
@@ -40,7 +39,7 @@
     flex-direction: column;
     gap: 20px;
 }
-/* Map + Search grouped */
+
 .map-section {
     display: flex;
     flex-direction: column;
@@ -49,7 +48,6 @@
     margin: 0;
 }
 
-/* Map card */
 .map-card {
     background: white;
     padding: 16px;
@@ -75,7 +73,6 @@
     box-sizing: border-box;
 }
 
-/* Search bar */
 .search-bar-container {
     display: flex;
     justify-content: center;
@@ -106,19 +103,18 @@
     padding: 10px 18px;
     border: none;
     border-radius: 8px;
-    background-color: var(--secondary-text); /* same green */
+    background-color: var(--secondary-text);
     color: white;
     font-size: 14px;
-    font-weight: 600; /* bold text */
+    font-weight: 600;
     cursor: pointer;
     transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .search-bar button:hover {
-    background-color: #41502e; /* darker green */
+    background-color: #41502e;
 }
 
-/* Section title */
 .section-title {
     text-align: center;
     font-size: 28px;
@@ -128,11 +124,11 @@
 }
 
 .selected-location-popup {
-    background: #E9F3E4; /* soft green background */
+    background: #E9F3E4;
     padding: 24px;
     border-radius: 16px;
-    box-shadow: 0 6px 16px rgba(92, 108, 71, 0.3); /* stronger green shadow */
-    color: #2F4F2F; /* dark green text */
+    box-shadow: 0 6px 16px rgba(92, 108, 71, 0.3);
+    color: #2F4F2F;
     text-align: center;
     font-size: 14px;
     line-height: 1.5;
@@ -161,30 +157,30 @@
     padding: 8px 16px;
     border: none;
     border-radius: 6px;
-    background-color: var(--secondary-text); /* already green */
+    background-color: var(--secondary-text);
     color: white;
     cursor: pointer;
     transition: background 0.2s ease;
 }
 
 .popup-buttons button:hover {
-    background-color: #465149; /* darker on hover */
+    background-color: #465149;
 }
 
-/* Continue button */
+
 .point-selector-button-container {
     display: flex;
-    justify-content: center; /* center horizontally */
-    margin: 20px auto 0 auto; /* add spacing and keep it aligned */
+    justify-content: center;
+    margin: 20px auto 0 auto;
     width: 100%;
-    max-width: 1000px; /* align with map-card width */
+    max-width: 1000px;
 }
 
 .point-selector-button-container button {
     padding: 12px 24px;
     border: none;
     border-radius: 8px;
-    background-color: var(--secondary-text); /* your green */
+    background-color: var(--secondary-text);
     color: white;
     font-size: 16px;
     font-weight: 600;
@@ -194,17 +190,17 @@
 }
 
 .point-selector-button-container button:hover {
-    background-color: #41502e; /* darker green */
-    transform: translateY(-2px); /* subtle lift */
+    background-color: #41502e;
+    transform: translateY(-2px);
 }
 
 .point-selector-button-container button:disabled {
-    background-color: #ccc;         /* gray background */
-    color: #666;                    /* muted text */
-    cursor: not-allowed;            /* "forbidden" cursor */
-    box-shadow: none;               /* remove shadow */
-    transform: none;                /* no lift effect */
-    opacity: 0.7;                   /* slightly faded */
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+    opacity: 0.7;
 }
 
 .left-pane-cards {
@@ -213,7 +209,6 @@
     gap: 20px;
 }
 
-/* Instructions card */
 .instructions-card {
     background: white;
     padding: 20px;
@@ -229,7 +224,6 @@
     margin-right: 4px;
 }
 
-/* Specific tweaks if needed */
 .location-summary-card {
     background: white;
     padding: 24px;
@@ -245,7 +239,6 @@
     padding: 6px 0;
 }
 
-/* Container for stacking cards */
 .left-pane-cards {
     display: flex;
     flex-direction: column;
@@ -254,7 +247,7 @@
 
 .selected-location-container {
     width: 100%;
-    max-width: 300px;   /* match left pane width */
+    max-width: 300px;
 }
 
 .toggle-section {

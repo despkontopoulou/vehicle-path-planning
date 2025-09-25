@@ -94,7 +94,6 @@ export default function StatsResultsPage() {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Total Distance */}
                 <div className="chart-card">
                     <h3>Total Distance (km)</h3>
                     <ResponsiveContainer width="100%" height={300}>
@@ -109,7 +108,6 @@ export default function StatsResultsPage() {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Total Time */}
                 <div className="chart-card">
                     <h3>Total Time (minutes)</h3>
                     <ResponsiveContainer width="100%" height={300}>
@@ -124,7 +122,6 @@ export default function StatsResultsPage() {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Explored Nodes */}
                 <div className="chart-card">
                     <h3>Explored Nodes</h3>
                     <ResponsiveContainer width="100%" height={300}>
@@ -139,7 +136,6 @@ export default function StatsResultsPage() {
                     </ResponsiveContainer>
                 </div>
 
-                {/* Raw Data – spans full grid */}
                 <div className="table-card grid-span-2">
                     <h3>Raw Data</h3>
                     <div className="table-scroll">

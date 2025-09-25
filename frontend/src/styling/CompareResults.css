@@ -22,12 +22,12 @@
 
 .results-row {
     display: flex;
-    justify-content: center;   /* center the cards as a group */
-    gap: 40px;                 /* horizontal spacing */
+    justify-content: center;
+    gap: 40px;
     max-width: 1500px;
     margin: 0 auto;
-    flex-wrap: wrap;           /* allow wrapping if needed */
-    transition: all 0.3s ease; /* smooth row adjustments */
+    flex-wrap: wrap;
+    transition: all 0.3s ease;
 }
 
 .result-card {
@@ -35,20 +35,19 @@
     padding: 20px;
     border-radius: 16px;
     box-shadow: 0 6px 16px rgba(0,0,0,0.1);
-    flex: 1 1 0;               /* cards share available space */
-    max-width: 700px;          /* don’t let them stretch too wide */
+    flex: 1 1 0;
+    max-width: 700px;
 }
 
-/* Responsive: stack cards on small screens */
 @media (max-width: 900px) {
     .results-row {
         flex-direction: column;
-        align-items: center;   /* keep stacked cards centered */
+        align-items: center;
     }
 
     .result-card {
-        width: 90%;            /* make them nicely sized when stacked */
-        max-width: 600px;      /* keep consistent */
+        width: 90%;
+        max-width: 600px;
     }
 }
 
@@ -59,23 +58,20 @@
     overflow: hidden;
 }
 
-/* Let the Leaflet map fill the wrapper */
 .map-fill {
     width: 100%;
     height: 100%;
 }
 
-/* Modern browsers: perfect square */
 @supports (aspect-ratio: 1 / 1) {
     .map-square {
         aspect-ratio: 1 / 1;
     }
 }
 
-/* Fallback for older browsers */
 @supports not (aspect-ratio: 1 / 1) {
     .map-square {
-        padding-top: 100%; /* height = width */
+        padding-top: 100%;
     }
     .map-square .map-fill {
         position: absolute;
@@ -87,11 +83,11 @@
     text-align: center;
     font-size: 28px;
     font-weight: 500;
-    margin-top: 100px; /* push it down a bit */
-    color: var(--secondary-text); /* soft green from your palette */
+    margin-top: 100px;
+    color: var(--secondary-text);
 }
 
-/* --- Profile Toggle --- */
+
 .profile-toggle {
     margin-bottom: 20px;
     text-align: center;

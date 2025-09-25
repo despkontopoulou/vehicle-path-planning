@@ -15,7 +15,7 @@
 }
 
 .stats-table th {
-    background-color: var(--secondary-text); /* lighter green */
+    background-color: var(--secondary-text);
     color: white;
     font-weight: 600;
     padding: 12px;
@@ -25,7 +25,7 @@
 
 .stats-table td {
     background: white;
-    color: var(--primary-text); /* darker green */
+    color: var(--primary-text);
     padding: 12px;
     text-align: center;
     border-top: 1px solid #eee;

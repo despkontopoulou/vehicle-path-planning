@@ -21,7 +21,6 @@ export default function MapView({ start, end, waypoints = [], routes, index = 0 
             >
                 <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-                {/* Draw all algorithm routes */}
                 {routes.map((r) => (
                     <Polyline
                         key={r.name}
@@ -31,21 +30,18 @@ export default function MapView({ start, end, waypoints = [], routes, index = 0 
                     />
                 ))}
 
-                {/* Start marker */}
                 {start && (
                     <Marker position={[start.lat, start.lng]} icon={startIcon}>
                         <Popup>Start</Popup>
                     </Marker>
                 )}
 
-                {/* Waypoint markers */}
                 {waypoints.map((wp, idx) => (
                     <Marker key={idx} position={[wp.lat, wp.lng]} icon={waypointIcon}>
                         <Popup>Waypoint {idx + 1}</Popup>
                     </Marker>
                 ))}
 
-                {/* End marker */}
                 {end && (
                     <Marker position={[end.lat, end.lng]} icon={endIcon}>
                         <Popup>End</Popup>

@@ -1,4 +1,4 @@
-/* Toggles in the right pane of PointSelectionPage (stats mode) */
+
 .stats-toggles {
     margin-top: 20px;
     background: #fff;
@@ -19,7 +19,6 @@
     color: var(--secondary-text);
 }
 
-/* Results page container */
 .stats-results-page {
     padding: 40px;
     max-width: 1400px;
@@ -34,14 +33,12 @@
     color: var(--primary-text);
 }
 
-/* Grid layout for charts + table */
 .chart-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 2 columns */
+    grid-template-columns: 1fr 1fr;
     gap: 30px;
 }
 
-/* Card styles for charts and table */
 .chart-card,
 .table-card {
     background: white;
@@ -58,17 +55,14 @@
     font-weight: 600;
 }
 
-/* Make table span both grid columns */
 .grid-span-2 {
     grid-column: 1 / -1;
 }
 
-/* Scroll wrapper for raw data table */
 .table-scroll {
     overflow-x: auto;
 }
 
-/* Raw data table styles */
 .table-card table {
     width: 100%;
     border-collapse: collapse;
@@ -89,7 +83,6 @@
     font-weight: bold;
 }
 
-/* Status messages (loading, error, empty) */
 .status-message {
     text-align: center;
     padding: 40px;

@@ -1,8 +1,5 @@
 .single-results-page {
-    padding-left: 8%;
-    padding-right: 8%;
-    padding-top: 2%;
-    padding-bottom: 2%;
+    padding: 2% 8%;
 }
 
 .single-result-card {
@@ -11,7 +8,7 @@
     border-radius: 20px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
     max-width: 1000px;
-    margin: 40px auto; /* center the card */
+    margin: 40px auto;
     display: flex;
     flex-direction: column;
     gap: 20px;

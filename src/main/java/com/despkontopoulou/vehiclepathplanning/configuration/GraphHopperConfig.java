@@ -2,8 +2,6 @@ package com.despkontopoulou.vehiclepathplanning.configuration;
 
 import com.graphhopper.GraphHopper;
 import com.graphhopper.config.Profile;
-import com.graphhopper.json.Statement;
-import com.graphhopper.util.CustomModel;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
