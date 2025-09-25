@@ -13,7 +13,7 @@ export default function LandingPage() {
             <FadeUpOnScroll delay={0.05}>
                 <HeroSection
                     title="Compare and Visualize Pathfinding Algorithms"
-                    subtitle="A research-backed routing app showcasing pathfinding algorithms for multiple vehicle and routing types"
+                    subtitle="A research-backed routing app showcasing pathfinding algorithms for multiple vehicles and routing types"
                 />
             </FadeUpOnScroll>
 
@@ -24,7 +24,9 @@ export default function LandingPage() {
                         "Built as part of my dissertation at University of Piraeus, this app lets you...",
                         "• Explore shortest or fastest routes",
                         "• Select from various vehicle types",
+                        "• Add Waypoints",
                         "• Compare algorithm performance side by side",
+                        "• See Statistics",
                         "• Visualize routing on real maps",
                     ]}
                 />
@@ -47,14 +49,14 @@ export default function LandingPage() {
                         "Compare Algorithms & Profiles",
                         "Find Route with Waypoints",
                         "Compare Algorithms & Profiles with Waypoints",
-                        "Read Project Overview"
+                        "Show Stats"
                 ]}
                   routes={[
                       "/single",
                       "/compare",
                       "/multi",
                       "/multi/compare",
-                      "/about"
+                      "/stats"
                   ]}
                 />
             </FadeUpOnScroll>

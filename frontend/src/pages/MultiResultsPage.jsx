@@ -35,6 +35,13 @@ export default function MultiResultsPage() {
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
 
+    const ALGO_LABELS = {
+        astar: "A*",
+        astarbi: "A* Bidirectional",
+        dijkstra: "Dijkstra",
+        dijkstrabi: "Dijkstra Bidirectional"
+    };
+
     useEffect(() => {
         if (!start || !end) {
             setErr('Missing start or end coordinates');
@@ -77,7 +84,10 @@ export default function MultiResultsPage() {
 
             <div className="results-row">
                 <div className="result-card">
-                    <h3 className="algo-title">{algorithm}</h3>
+                    <h3 className="algo-title">
+                        {ALGO_LABELS[algorithm] || algorithm} ·{" "}
+                        {profile.endsWith("fastest") ? "Fastest Routing" : "Shortest Routing"}
+                    </h3>
                     <MapView
                         start={start}
                         end={end}

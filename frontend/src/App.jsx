@@ -8,6 +8,8 @@ import MultiRoutePage from './pages/MultiRoutePage';
 import MultiResultsPage from './pages/MultiResultsPage';
 import CompareMultiRoutePage from './pages/CompareMultiRoutePage'
 import CompareMultiResultsPage from './pages/CompareMultiResultsPage'
+import StatsPage from "./pages/StatsPage";
+import StatsResultsPage from "./pages/StatsResultsPage";
 
 export default function App() {
     return (
@@ -26,6 +28,9 @@ export default function App() {
 
                 <Route path="/multi/compare" element={<CompareMultiRoutePage />} />
                 <Route path="/multi/compare/results" element={<CompareMultiResultsPage />} />
+
+                <Route path="/stats" element={<StatsPage />} />
+                <Route path="/stats/results" element={<StatsResultsPage />} />
 
                 <Route path="*" element={<div>Page Not Found</div>} />
             </Routes>

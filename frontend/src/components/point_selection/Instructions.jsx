@@ -46,27 +46,46 @@ export default function Instructions({ mode }) {
                             and are numbered in the <strong>Waypoint List</strong>.
                         </p>
                         <p>
-                            You can <strong>drag & drop</strong> waypoints in the list to reorder them.
+                            <strong>5.</strong> You can <strong>drag & drop</strong> waypoints in the list to reorder them.
                             The route will follow this order between Start and End.
                         </p>
 
                         {mode === "multi" && (
                             <>
                                 <p>
-                                    <strong>5.</strong> Choose <strong>Routing Preference</strong> and{" "}
+                                    <strong>6.</strong> Choose <strong>Routing Preference</strong> and{" "}
                                     <strong>Algorithm</strong>.
                                 </p>
                                 <p>
-                                    <strong>6.</strong> Click <strong>Find Multi-Route</strong>.
+                                    <strong>7.</strong> Click <strong>Find Multi-Route</strong>.
                                 </p>
                             </>
                         )}
                         {mode === "multiCompare" && (
                             <p>
-                                <strong>5.</strong> Click <strong>Compare Multi-Algorithms</strong>.
+                                <strong>6.</strong> Click <strong>Compare Multi-Algorithms</strong>.
                                 The system will evaluate all algorithms with your waypoints.
                             </p>
                         )}
+                    </>
+                )}
+
+                {mode === "stats" && (
+                    <>
+                        <p>
+                            <strong>4.</strong> (Optional) Add one or more <strong>Waypoints</strong>.
+                            They will appear{" "}
+                            <span style={{ color: "blue", fontWeight: "bold" }}>blue</span> on the map
+                            and are listed in the <strong>Waypoint List</strong>.
+                        </p>
+                        <p>
+                            <strong>5.</strong> Select at least one <strong>Vehicle</strong>,{" "}
+                            <strong>Profile</strong> and <strong>Algorithm</strong> from the right-hand panel.
+                        </p>
+                        <p>
+                            <strong>6.</strong> Click <strong>Show Stats</strong> to view graphs and raw data
+                            for the chosen combinations.
+                        </p>
                     </>
                 )}
             </div>

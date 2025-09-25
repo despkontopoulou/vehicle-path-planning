@@ -68,3 +68,18 @@ export function compareMultiRoutes(params) {
     return client.get('multi/compare', { params: query })
         .then(res => res.data);
 }
+
+export function getStats(params) {
+    return client.get('stats', {
+        params: {
+            startLat: params.startLat,
+            startLon: params.startLon,
+            endLat: params.endLat,
+            endLon: params.endLon,
+            vehicles: params.vehicles,
+            profiles: params.profiles,
+            algorithms: params.algorithms,
+        }
+    }).then(res => res.data);
+}
+

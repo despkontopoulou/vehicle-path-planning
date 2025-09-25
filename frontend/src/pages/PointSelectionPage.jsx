@@ -1,3 +1,4 @@
+// PointSelectionPage.jsx
 import { useEffect, useRef, useState } from 'react';
 import 'leaflet/dist/leaflet.css';
 import '../styling/PointSelector.css';
@@ -29,7 +30,25 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     const [algorithm, setAlgorithm] = useState(null);
     const [waypoints, setWaypoints] = useState([]);
     const [waypointLabels, setWaypointLabels] = useState([]);
+    const [selectedVehicles, setSelectedVehicles] = useState([]);
+    const [selectedProfiles, setSelectedProfiles] = useState([]);
+    const [selectedAlgorithms, setSelectedAlgorithms] = useState([]);
 
+    const ALGO_LABELS = {
+        astar: "A*",
+        astarbi: "A* Bidirectional",
+        dijkstra: "Dijkstra",
+        dijkstrabi: "Dijkstra Bidirectional"
+    };
+
+
+    const toggleSelection = (item, setFn, current) => {
+        if (current.includes(item)) {
+            setFn(current.filter(x => x !== item));
+        } else {
+            setFn([...current, item]);
+        }
+    };
 
     const mapRef = useRef(null);
 
@@ -70,11 +89,10 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
             setEnd(pendingPoint);
             setEndLabel(pendingLabel);
 
-            // Only allow waypoints if we're in multi modes
-            if (mode === "multi" || mode === "multiCompare") {
+            if (mode === "multi" || mode === "multiCompare" || mode === "stats") {
                 setWhichToSet("waypoint");
             } else {
-                setWhichToSet(null); // stop further placement
+                setWhichToSet(null);
             }
         } else if (whichToSet === "waypoint") {
             setWaypoints([...waypoints, pendingPoint]);
@@ -86,26 +104,42 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     };
 
     const handleContinue = () => {
-        const profile = `${vehicle}_${routingPref}`;
-        if (!start || !end || !vehicle || !routingPref) return;
+        if (!start || !end) return;
 
         if (mode === "single") {
+            const profile = `${vehicle}_${routingPref}`;
             if (algorithm) onPointsSelected(start, end, profile, algorithm);
         } else if (mode === "compare") {
+            const profile = `${vehicle}_${routingPref}`;
             onPointsSelected(start, end, profile);
         } else if (mode === "multi") {
+            const profile = `${vehicle}_${routingPref}`;
             if (algorithm) onPointsSelected(start, end, waypoints, profile, algorithm);
         } else if (mode === "multiCompare") {
+            const profile = `${vehicle}_${routingPref}`;
             onPointsSelected(start, end, waypoints, profile);
+        } else if (mode === "stats") {
+            onPointsSelected(
+                start,
+                end,
+                waypoints, // can be empty
+                selectedVehicles,
+                selectedProfiles,
+                selectedAlgorithms
+            );
         }
     };
 
     return (
         <div className="point-selector-container">
             <SectionTitle
-                text={mode === 'compare'
-                    ? 'Select Points to Compare Algorithms'
-                    : 'Select Points to Find Route'}
+                text={
+                    mode === 'compare' || mode === 'multiCompare'
+                        ? 'Select Points to Compare Algorithms'
+                        : mode === 'stats'
+                            ? 'Select Points to Show Stats'
+                            : 'Select Points to Find Route'
+                }
             />
 
             <PointSelectorLayout
@@ -120,7 +154,9 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                 setPendingLabel('');
                             }}
                         />
-                        {(mode === "multi" || mode === "multiCompare") && (
+
+                        {/* Waypoints only in multi modes */}
+                        {(mode === "multi" || mode === "multiCompare" || mode === "stats") && (
                             <WaypointSummary
                                 waypoints={waypoints}
                                 labels={waypointLabels}
@@ -131,13 +167,10 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                 onReorder={(from, to) => {
                                     const reorderedWps = [...waypoints];
                                     const reorderedLabels = [...waypointLabels];
-
                                     const [movedWp] = reorderedWps.splice(from, 1);
                                     const [movedLabel] = reorderedLabels.splice(from, 1);
-
                                     reorderedWps.splice(to, 0, movedWp);
                                     reorderedLabels.splice(to, 0, movedLabel);
-
                                     setWaypoints(reorderedWps);
                                     setWaypointLabels(reorderedLabels);
                                 }}
@@ -177,29 +210,37 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                             </MapWrapper>
                         </div>
 
-                        <div className="toggle-section">
-                            <VehicleToggle value={vehicle} onChange={setVehicle} />
-                            <ProfileToggle value={routingPref} onChange={setRoutingPref} />
+                        {/* Toggles only for non-stats modes */}
+                        {mode !== "stats" && (
+                            <div className="toggle-section">
+                                <VehicleToggle value={vehicle} onChange={setVehicle} />
+                                <ProfileToggle value={routingPref} onChange={setRoutingPref} />
 
-                            {(mode === "single" || mode === "multi") && (
-                                <AlgorithmToggle value={algorithm} onChange={setAlgorithm} />
-                            )}
-                        </div>
+                                {(mode === "single" || mode === "multi") && (
+                                    <AlgorithmToggle value={algorithm} onChange={setAlgorithm} />
+                                )}
+                            </div>
+                        )}
 
                         <div className="point-selector-button-container">
                             <button
                                 onClick={handleContinue}
                                 disabled={
                                     !start || !end ||
-                                    !vehicle || !routingPref ||
                                     ((mode === "single" || mode === "multi") && !algorithm) ||
-                                    ((mode === "multi" || mode === "multiCompare") && waypoints.length === 0)
+                                    ((mode === "multi" || mode === "multiCompare") && waypoints.length === 0) ||
+                                    (mode === "stats" && (
+                                        selectedVehicles.length === 0 ||
+                                        selectedProfiles.length === 0 ||
+                                        selectedAlgorithms.length === 0
+                                    ))
                                 }
                             >
                                 {mode === 'compare' ? "Compare Routes" :
                                     mode === 'multi' ? "Find Multi-Route" :
                                         mode === 'multiCompare' ? "Compare Multi-Route" :
-                                            "Find Route"}
+                                            mode === 'stats' ? "Show Stats" :
+                                                "Find Route"}
                             </button>
                         </div>
                     </div>
@@ -207,6 +248,53 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                 right={
                     <div className="instructions-side">
                         <Instructions mode={mode} />
+
+                        {/* Stats checkboxes */}
+                        {mode === "stats" && (
+                            <div className="stats-toggles">
+                                <h4>Vehicles</h4>
+                                {["car", "bike", "foot"].map(v => (
+                                    <label key={v}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedVehicles.includes(v)}
+                                            onChange={() =>
+                                                toggleSelection(v, setSelectedVehicles, selectedVehicles)
+                                            }
+                                        />
+                                        {v.charAt(0).toUpperCase() + v.slice(1)}
+                                    </label>
+                                ))}
+
+                                <h4>Profiles</h4>
+                                {["fastest", "shortest"].map(p => (
+                                    <label key={p}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedProfiles.includes(p)}
+                                            onChange={() =>
+                                                toggleSelection(p, setSelectedProfiles, selectedProfiles)
+                                            }
+                                        />
+                                        {p.charAt(0).toUpperCase() + p.slice(1)}
+                                    </label>
+                                ))}
+
+                                <h4>Algorithms</h4>
+                                {Object.entries(ALGO_LABELS).map(([key, label]) => (
+                                    <label key={key}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedAlgorithms.includes(key)}
+                                            onChange={() =>
+                                                toggleSelection(key, setSelectedAlgorithms, selectedAlgorithms)
+                                            }
+                                        />
+                                        {label}
+                                    </label>
+                                ))}
+                            </div>
+                        )}
                     </div>
                 }
             />

@@ -1,0 +1,107 @@
+/* Toggles in the right pane of PointSelectionPage (stats mode) */
+.stats-toggles {
+    margin-top: 20px;
+    background: #fff;
+    padding: 16px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.stats-toggles h4 {
+    margin: 12px 0 6px;
+    color: var(--primary-text);
+}
+
+.stats-toggles label {
+    display: block;
+    margin: 4px 0;
+    font-size: 14px;
+    color: var(--secondary-text);
+}
+
+/* Results page container */
+.stats-results-page {
+    padding: 40px;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 40px;
+    color: var(--primary-text);
+}
+
+/* Grid layout for charts + table */
+.chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columns */
+    gap: 30px;
+}
+
+/* Card styles for charts and table */
+.chart-card,
+.table-card {
+    background: white;
+    padding: 20px;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.chart-card h3,
+.table-card h3 {
+    margin-bottom: 15px;
+    color: var(--secondary-text);
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Make table span both grid columns */
+.grid-span-2 {
+    grid-column: 1 / -1;
+}
+
+/* Scroll wrapper for raw data table */
+.table-scroll {
+    overflow-x: auto;
+}
+
+/* Raw data table styles */
+.table-card table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table-card th,
+.table-card td {
+    padding: 10px 12px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    white-space: nowrap;
+}
+
+.table-card th {
+    background: var(--bg-color);
+    color: var(--primary-text);
+    font-weight: bold;
+}
+
+/* Status messages (loading, error, empty) */
+.status-message {
+    text-align: center;
+    padding: 40px;
+    color: var(--secondary-text);
+    font-size: 16px;
+}
+
+.section-description {
+    text-align: center;
+    font-size: 16px;
+    color: var(--secondary-text);
+    margin: -20px auto 40px;
+    max-width: 800px;
+    line-height: 1.6;
+}
