@@ -38,6 +38,10 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
     }, []);
 
     const handleMapClick = async (latlng) => {
+        if ((mode === "single" || mode === "compare") && !whichToSet) {
+            return;
+        }
+
         const label = await reverseGeocode(latlng.lat, latlng.lng);
         setPendingPoint(latlng);
         setPendingLabel(label);
@@ -65,7 +69,13 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
         } else if (whichToSet === "end") {
             setEnd(pendingPoint);
             setEndLabel(pendingLabel);
-            setWhichToSet("waypoint");
+
+            // Only allow waypoints if we're in multi modes
+            if (mode === "multi" || mode === "multiCompare") {
+                setWhichToSet("waypoint");
+            } else {
+                setWhichToSet(null); // stop further placement
+            }
         } else if (whichToSet === "waypoint") {
             setWaypoints([...waypoints, pendingPoint]);
             setWaypointLabels([...waypointLabels, pendingLabel]);
@@ -89,9 +99,6 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
             onPointsSelected(start, end, waypoints, profile);
         }
     };
-
-
-
 
     return (
         <div className="point-selector-container">
@@ -135,10 +142,7 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                     setWaypointLabels(reorderedLabels);
                                 }}
                             />
-
                         )}
-
-                        <Instructions mode={mode} />
 
                         {pendingPoint && (
                             <div className="selected-location-container">
@@ -154,7 +158,7 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                         )}
                     </div>
                 }
-                right={
+                center={
                     <div className="map-section">
                         <div className="search-bar-container">
                             <SearchBar onSearch={handleSearch} />
@@ -172,6 +176,7 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                 />
                             </MapWrapper>
                         </div>
+
                         <div className="toggle-section">
                             <VehicleToggle value={vehicle} onChange={setVehicle} />
                             <ProfileToggle value={routingPref} onChange={setRoutingPref} />
@@ -187,15 +192,21 @@ export default function PointSelectionPage({ onPointsSelected, mode }) {
                                 disabled={
                                     !start || !end ||
                                     !vehicle || !routingPref ||
-                                    ((mode === "single" || mode === "multi") && !algorithm)
+                                    ((mode === "single" || mode === "multi") && !algorithm) ||
+                                    ((mode === "multi" || mode === "multiCompare") && waypoints.length === 0)
                                 }
                             >
-                                {mode === 'compare' ? "Compare Algorithms" :
+                                {mode === 'compare' ? "Compare Routes" :
                                     mode === 'multi' ? "Find Multi-Route" :
-                                        mode === 'multiCompare' ? "Compare Multi-Algorithms" :
+                                        mode === 'multiCompare' ? "Compare Multi-Route" :
                                             "Find Route"}
                             </button>
                         </div>
+                    </div>
+                }
+                right={
+                    <div className="instructions-side">
+                        <Instructions mode={mode} />
                     </div>
                 }
             />
