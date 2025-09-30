@@ -16,6 +16,6 @@ public class MultiRoutingService {
 
     public RouteResponse getMultiRoute(MultiRouteRequest request) {
         return executor.execute(request)
-                .orElseThrow(() -> new RuntimeException("No route found")); //TODO: HANDLE EXCEPTIONS
+                .orElseThrow(() -> new RuntimeException("No route found"));
     }
 }
